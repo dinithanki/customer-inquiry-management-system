@@ -55,7 +55,6 @@ export function Sidebar({ role = "ADMIN", open, collapsed, onClose, onToggleColl
         </nav>
         <div className="sidebar-bottom">
           <div className="sidebar-profile">
-            <span className="avatar">AU</span>
             <span className="profile-copy"><strong>{user?.name ?? user?.email ?? "User"}</strong><span>{role.toLowerCase()}</span></span>
           </div>
           <div className="sidebar-actions">

@@ -196,6 +196,25 @@ textarea:focus-visible {
   padding: 0 6px;
 }
 
+.sidebar.collapsed .sidebar-actions {
+  position: absolute;
+  right: 19px;
+  bottom: 14px;
+  left: 19px;
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar.collapsed .sidebar-actions button:first-child {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-actions button:last-child {
+  flex: 0 0 38px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
 .sidebar-icon-button,
 .topbar-icon-button {
   display: inline-grid;
@@ -692,28 +711,28 @@ textarea:focus-visible {
   text-overflow: ellipsis;
 }
 
-.inquiry-row-new {
-  background: #f5f9ff;
+.inquiry-row-new > td {
+  background-color: #eff6ff;
 }
 
-.inquiry-row-in_progress {
-  background: #fffdf5;
+.inquiry-row-in_progress > td {
+  background-color: #fffbeb;
 }
 
-.inquiry-row-resolved {
-  background: #f5fcf6;
+.inquiry-row-resolved > td {
+  background-color: #f0fdf4;
 }
 
-.inquiry-row-new:hover {
-  background: #edf5ff;
+.inquiry-row-new:hover > td {
+  background-color: #dbeafe;
 }
 
-.inquiry-row-in_progress:hover {
-  background: #fffae9;
+.inquiry-row-in_progress:hover > td {
+  background-color: #fef3c7;
 }
 
-.inquiry-row-resolved:hover {
-  background: #eef9f0;
+.inquiry-row-resolved:hover > td {
+  background-color: #dcfce7;
 }
 
 .contact-method,
@@ -783,6 +802,13 @@ textarea:focus-visible {
   text-decoration: none;
   cursor: pointer;
   transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.table-action-icon {
+  width: 34px;
+  min-height: 34px;
+  flex: 0 0 34px;
+  padding: 0;
 }
 
 .table-action-button:hover {

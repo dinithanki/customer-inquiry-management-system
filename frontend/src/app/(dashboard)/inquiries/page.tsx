@@ -115,12 +115,16 @@ export default function InquiriesPage() {
                   </td>
                   <td>
                     <div className="table-actions">
-                      <Link className="table-action-button" href={`/inquiries/${inquiry.id}`}>
+                      <Link
+                        className="table-action-button table-action-icon"
+                        href={`/inquiries/${inquiry.id}`}
+                        title="View inquiry"
+                        aria-label="View inquiry"
+                      >
                         <Eye size={15} />
-                        <span>View</span>
                       </Link>
                       <button
-                        className="table-action-button table-action-primary"
+                        className="table-action-button table-action-primary table-action-icon"
                         type="button"
                         title={inquiry.status === "NEW" ? "Start inquiry" : inquiry.status === "IN_PROGRESS" ? "Resolve inquiry" : "Reopen inquiry"}
                         aria-label={inquiry.status === "NEW" ? "Start inquiry" : inquiry.status === "IN_PROGRESS" ? "Resolve inquiry" : "Reopen inquiry"}
@@ -129,9 +133,14 @@ export default function InquiriesPage() {
                         {inquiry.status === "RESOLVED" ? <RotateCcw size={15} /> : <ArrowRight size={15} />}
                       </button>
                       {role === "ADMIN" && (
-                        <button className="table-action-button table-action-danger" type="button" onClick={() => void remove(inquiry)}>
+                        <button
+                          className="table-action-button table-action-danger table-action-icon"
+                          type="button"
+                          title="Delete inquiry"
+                          aria-label="Delete inquiry"
+                          onClick={() => void remove(inquiry)}
+                        >
                           <Trash2 size={15} />
-                          <span>Delete</span>
                         </button>
                       )}
                     </div>
