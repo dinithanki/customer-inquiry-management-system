@@ -173,6 +173,19 @@ export async function createInquiry(
   try {
     await client.query("BEGIN");
 
+    // Serialize inquiry creation for the same normalized contact.
+    // The transaction-level advisory lock is automatically released
+    // when this transaction commits or rolls back.
+    await client.query(
+      `SELECT pg_advisory_xact_lock(
+         hashtextextended($1, 0)
+       )`,
+      [normalizedContact]
+    );
+
+    // Check for duplicates after acquiring the lock.
+    // A concurrent request using the same contact must wait until
+    // the first transaction finishes.
     const duplicates = await client.query<DuplicateInquiry>(
       `SELECT
          id,
