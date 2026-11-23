@@ -14,7 +14,6 @@ import {
   createSession,
   rotateRefreshToken,
   revokeSession,
-  revokeOtherUserSessions,
 } from "../services/session.service.js";
 
 import { generateAccessToken } from "../utils/jwt.js";
@@ -236,9 +235,11 @@ export async function changePassword(
 
     const { currentPassword, newPassword } = validation.data;
 
-    // 2. Change the password.
+    // 2. Change password and revoke other sessions
+    // within one database transaction.
     const result = await changeUserPassword({
       userId: req.user.id,
+      currentSessionId: req.user.sessionId,
       currentPassword,
       newPassword,
     });
@@ -257,13 +258,7 @@ export async function changePassword(
       });
     }
 
-    // 3. Revoke all other active sessions.
-    await revokeOtherUserSessions(
-      req.user.id,
-      req.user.sessionId
-    );
-
-    // 4. Return success.
+    // 3. Return success.
     return res.status(200).json({
       success: true,
       message: "Password changed successfully",

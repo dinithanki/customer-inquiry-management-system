@@ -15,9 +15,13 @@ export async function authenticateUser(
   email: string,
   password: string
 ): Promise<AuthenticatedUser | null> {
-
   // Find the user using their email.
-  const result = await pool.query<AuthenticatedUser & { password_hash: string }>(
+  const result = await pool.query<
+    AuthenticatedUser & {
+      password_hash: string;
+      temporary_password_expires_at: Date | null;
+    }
+  >(
     `SELECT
        id,
        name,
@@ -25,7 +29,8 @@ export async function authenticateUser(
        role,
        is_active,
        must_change_password,
-       password_hash
+       password_hash,
+       temporary_password_expires_at
      FROM users
      WHERE email = $1`,
     [email]
@@ -53,8 +58,22 @@ export async function authenticateUser(
     return null;
   }
 
+  // Check expiry only when the user must change a temporary password.
+  if (user.must_change_password) {
+    const expiry = user.temporary_password_expires_at;
+
+    // Reject missing or expired temporary password expiry dates.
+    if (!expiry || new Date(expiry).getTime() <= Date.now()) {
+      return null;
+    }
+  }
+
   // Return only safe user information.
-  const { password_hash, ...authenticatedUser } = user;
+  const {
+    password_hash,
+    temporary_password_expires_at,
+    ...authenticatedUser
+  } = user;
 
   return authenticatedUser;
 }

@@ -16,12 +16,16 @@ interface TestUser {
 
 let activeUser: TestUser;
 let inactiveUser: TestUser;
+let validTemporaryUser: TestUser;
+let expiredTemporaryUser: TestUser;
 
 const createdUserIds: string[] = [];
 
 async function createTestUser(
   email: string,
-  isActive: boolean
+  isActive: boolean,
+  mustChangePassword = false,
+  temporaryPasswordExpiresAt: Date | null = null
 ): Promise<TestUser> {
   const passwordHash = await bcrypt.hash(TEST_PASSWORD, 10);
 
@@ -32,11 +36,19 @@ async function createTestUser(
       password_hash,
       role,
       is_active,
-      must_change_password
+      must_change_password,
+      temporary_password_expires_at
     )
-    VALUES ($1, $2, $3, 'STAFF', $4, FALSE)
+    VALUES ($1, $2, $3, 'STAFF', $4, $5, $6)
     RETURNING id, email`,
-    ["Authentication Test User", email, passwordHash, isActive]
+    [
+      "Authentication Test User",
+      email,
+      passwordHash,
+      isActive,
+      mustChangePassword,
+      temporaryPasswordExpiresAt,
+    ]
   );
 
   const user = result.rows[0];
@@ -69,6 +81,20 @@ describe("Authentication API Integration Tests", () => {
       `auth-inactive-${uniqueId}@example.com`,
       false
     );
+
+    validTemporaryUser = await createTestUser(
+      `auth-temp-valid-${uniqueId}@example.com`,
+      true,
+      true,
+      new Date(Date.now() + 60 * 60 * 1000)
+    );
+
+    expiredTemporaryUser = await createTestUser(
+      `auth-temp-expired-${uniqueId}@example.com`,
+      true,
+      true,
+      new Date(Date.now() - 60 * 60 * 1000)
+    );
   });
 
   afterAll(async () => {
@@ -80,7 +106,7 @@ describe("Authentication API Integration Tests", () => {
     }
   });
 
-  it("should log in an active user with valid credentials", async () => {
+  it("should log in an active user with valid permanent credentials", async () => {
     const response = await request(app)
       .post("/api/auth/login")
       .send({
@@ -114,6 +140,37 @@ describe("Authentication API Integration Tests", () => {
     expect(
       cookies.every((cookie) => cookie.toLowerCase().includes("httponly"))
     ).toBe(true);
+  });
+
+  it("should allow login with a valid temporary password before expiry", async () => {
+    const response = await request(app)
+      .post("/api/auth/login")
+      .send({
+        email: validTemporaryUser.email,
+        password: TEST_PASSWORD,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+
+    expect(response.body.data.user).toMatchObject({
+      id: validTemporaryUser.id,
+      email: validTemporaryUser.email,
+      must_change_password: true,
+    });
+  });
+
+  it("should reject login with an expired temporary password", async () => {
+    const response = await request(app)
+      .post("/api/auth/login")
+      .send({
+        email: expiredTemporaryUser.email,
+        password: TEST_PASSWORD,
+      });
+
+    expect(response.status).toBe(401);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe("Invalid email or password");
   });
 
   it("should reject login with an incorrect password", async () => {
