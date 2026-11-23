@@ -7,6 +7,8 @@ import { pool } from "../config/database.js";
 export interface AuthenticatedRequest extends Request {
   user?: {
     id: string;
+    name: string;
+    email: string;
     role: "ADMIN" | "STAFF";
     sessionId: string;
   };
@@ -68,12 +70,16 @@ export async function requireAuth(
   try {
     const result = await pool.query<{
       id: string;
+      name: string;
+      email: string;
       role: "ADMIN" | "STAFF";
       is_active: boolean;
       session_id: string;
     }>(
       `SELECT
          u.id,
+         u.name,
+         u.email,
          u.role,
          u.is_active,
          s.id AS session_id
@@ -103,6 +109,8 @@ export async function requireAuth(
 
     req.user = {
       id: authenticatedUser.id,
+      name: authenticatedUser.name,
+      email: authenticatedUser.email,
       role: authenticatedUser.role,
       sessionId: authenticatedUser.session_id,
     };

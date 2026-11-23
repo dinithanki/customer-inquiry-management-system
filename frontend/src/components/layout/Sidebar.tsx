@@ -41,12 +41,13 @@ export function Sidebar({ role = "ADMIN", open, collapsed, onClose, onToggleColl
           <span className="brand-mark"><Inbox size={19} /></span>
           <span className="brand-name">Inquiry Desk</span>
         </Link>
+        <div className="sidebar-section-label">Workspace</div>
         <nav className="sidebar-nav">
           {items.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
-              <Link className={`nav-item${active ? " active" : ""}`} href={item.href} key={item.href} title={collapsed ? item.label : undefined} onClick={onClose}>
+              <Link className={`nav-item${active ? " active" : ""}`} href={item.href} key={item.href} title={collapsed ? item.label : undefined} aria-current={active ? "page" : undefined} onClick={onClose}>
                 <Icon size={18} aria-hidden="true" />
                 <span className="nav-label">{item.label}</span>
               </Link>
@@ -58,8 +59,8 @@ export function Sidebar({ role = "ADMIN", open, collapsed, onClose, onToggleColl
             <span className="profile-copy"><strong>{user?.name ?? user?.email ?? "User"}</strong><span>{role.toLowerCase()}</span></span>
           </div>
           <div className="sidebar-actions">
-            <button className="sidebar-icon-button" type="button" title="Logout" aria-label="Logout" onClick={handleLogout}><LogOut size={17} /></button>
-            <button className="sidebar-icon-button" type="button" title={collapsed ? "Expand sidebar" : "Collapse sidebar"} aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"} onClick={onToggleCollapsed}>
+            <button className="sidebar-logout-button" type="button" title="Logout" aria-label="Logout" onClick={() => void handleLogout()}><LogOut size={17} /><span className="sidebar-logout-label">Log out</span></button>
+            <button className="sidebar-icon-button sidebar-collapse-button" type="button" title={collapsed ? "Expand sidebar" : "Collapse sidebar"} aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"} onClick={onToggleCollapsed}>
               {collapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
             </button>
           </div>

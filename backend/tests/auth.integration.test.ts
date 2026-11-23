@@ -107,7 +107,8 @@ describe("Authentication API Integration Tests", () => {
   });
 
   it("should log in an active user with valid permanent credentials", async () => {
-    const response = await request(app)
+    const agent = request.agent(app);
+    const response = await agent
       .post("/api/auth/login")
       .send({
         email: activeUser.email,
@@ -140,6 +141,16 @@ describe("Authentication API Integration Tests", () => {
     expect(
       cookies.every((cookie) => cookie.toLowerCase().includes("httponly"))
     ).toBe(true);
+
+    const currentUserResponse = await agent.get("/api/auth/me");
+
+    expect(currentUserResponse.status).toBe(200);
+    expect(currentUserResponse.body.data.user).toMatchObject({
+      id: activeUser.id,
+      name: "Authentication Test User",
+      email: activeUser.email,
+      role: "STAFF",
+    });
   });
 
   it("should allow login with a valid temporary password before expiry", async () => {

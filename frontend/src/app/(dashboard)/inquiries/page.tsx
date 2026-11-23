@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { CheckCircle2, CirclePlus, Inbox, LoaderCircle, Search, Trash2, Eye, ArrowRight, RotateCcw } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronLeft, ChevronRight, CirclePlus, Eye, Inbox, LoaderCircle, RotateCcw, Search, Trash2 } from "lucide-react";
 import { getApiErrorMessage } from "@/lib/api";
 import { deleteInquiry, listInquiries, getInquiry, updateInquiryStatus } from "@/services/inquiry.service";
 import type { InquiryListItem, InquiryStatus } from "@/types/inquiry";
@@ -98,14 +98,13 @@ export default function InquiriesPage() {
         ) : (
           <div className="table-wrap">
             <table className="inquiry-table">
-              <colgroup><col /><col /><col /><col /><col /><col /><col /></colgroup>
-              <thead><tr><th>Inquiry ID</th><th>Customer Name</th><th>Contact</th><th>Subject</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+              <colgroup><col /><col /><col /><col /><col /><col /></colgroup>
+              <thead><tr><th>Inquiry ID</th><th>Customer Name</th><th>Contact</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
               <tbody>{inquiries.map((inquiry) => (
                 <tr className={`inquiry-row inquiry-row-${inquiry.status.toLowerCase()}`} key={inquiry.id}>
                   <td><code>{inquiry.id.slice(0, 8)}</code></td>
                   <td><strong>{inquiry.customer_name}</strong></td>
                   <td><span className="contact-method">{inquiry.contact_method}</span><span className="muted contact-value">{inquiry.contact}</span></td>
-                  <td title={inquiry.subject}>{inquiry.subject}</td>
                   <td><StatusBadge status={inquiry.status} /></td>
                   <td className="inquiry-date">
                     <time dateTime={inquiry.created_at}>
@@ -152,7 +151,10 @@ export default function InquiriesPage() {
         )}
         <div className="pagination">
           <span>{pagination.total === 0 ? "0 records" : `${(page - 1) * pagination.limit + 1}-${Math.min(page * pagination.limit, pagination.total)} of ${pagination.total}`}</span>
-          <div><button className="button button-secondary" type="button" disabled={page <= 1} onClick={() => setPage((value) => value - 1)}>Previous</button><button className="button button-secondary" type="button" disabled={page >= pagination.totalPages} onClick={() => setPage((value) => value + 1)}>Next</button></div>
+          <div>
+            <button className="button pagination-button" type="button" disabled={page <= 1} onClick={() => setPage((value) => value - 1)}><ChevronLeft size={15} />Previous</button>
+            <button className="button pagination-button" type="button" disabled={page >= pagination.totalPages} onClick={() => setPage((value) => value + 1)}>Next<ChevronRight size={15} /></button>
+          </div>
         </div>
       </section>
     </>
