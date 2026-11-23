@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   }, [isInitialized, router, user]);
 
   if (!isInitialized) {
-    return <div className="login-screen"><div className="empty-state"><h3>Loading session</h3></div></div>;
+    return <div className="grid min-h-screen place-items-center bg-page p-8"><div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><h3 className="mt-1 mb-0 text-[15px] text-text">Loading session</h3></div></div>;
   }
 
   if (!user) return null;
@@ -37,15 +37,15 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const role = user.role;
 
   return (
-    <div className="dashboard-shell">
+    <div className="min-h-screen">
       <Suspense fallback={null}>
         <Sidebar role={role} open={open} collapsed={collapsed} onClose={() => setOpen(false)} onToggleCollapsed={() => setCollapsed((value) => !value)} />
       </Suspense>
-      <div className={`main-panel${collapsed ? " sidebar-collapsed" : ""}`}>
+      <div className={`min-h-screen transition-[margin-left] duration-[180ms] ${collapsed ? "ml-[76px]" : "ml-[248px]"} max-[760px]:ml-0`}>
         <Suspense fallback={null}>
           <TopNavbar title="Dashboard" role={role} onMenuClick={() => setOpen(true)} />
         </Suspense>
-        <main className="content">{children}</main>
+        <main className="mx-auto w-full max-w-[1240px] px-8 py-8 max-[760px]:px-4 max-[760px]:py-6">{children}</main>
       </div>
     </div>
   );

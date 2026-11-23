@@ -47,23 +47,23 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <section className="login-card" aria-labelledby="password-title">
-      <h1 id="password-title" style={{ margin: "0 0 8px", color: "#1e293b", fontSize: 24 }}>Change password</h1>
-      <p style={{ margin: "0 0 22px", color: "#64748b", fontSize: 13 }}>Your temporary password must be changed before continuing.</p>
-      {serverError && <p style={{ color: "#dc2626", fontSize: 12 }}>{serverError}</p>}
-      <form className="form-stack" onSubmit={handleSubmit(submit)} noValidate>
+    <section className="w-full max-w-[520px] rounded-3xl border border-border bg-white p-8 shadow-[0_28px_80px_rgba(15,23,42,0.14)] max-[420px]:p-[28px_22px]" aria-labelledby="password-title">
+      <h1 id="password-title" className="mb-2 text-2xl font-bold text-slate-800">Change password</h1>
+      <p className="mb-[22px] text-[13px] text-muted">Your temporary password must be changed before continuing.</p>
+      {serverError && <p className="text-xs text-error">{serverError}</p>}
+      <form className="grid gap-4" onSubmit={handleSubmit(submit)} noValidate>
         {([
           ["currentPassword", "Current password", "current-password"],
           ["newPassword", "New password", "new-password"],
           ["confirmPassword", "Confirm new password", "new-password"],
         ] as const).map(([name, label, autoComplete]) => (
-          <label key={name} style={{ display: "grid", gap: 7, color: "#475569", fontSize: 12, fontWeight: 600 }}>
+          <label key={name} className="grid gap-[7px] text-xs font-semibold text-slate-600">
             {label}
-            <input className="form-input" type="password" autoComplete={autoComplete} {...register(name)} />
-            {errors[name] && <span style={{ color: "#dc2626", fontWeight: 400 }}>{errors[name]?.message}</span>}
+            <input className="h-[42px] w-full rounded-lg border border-border bg-white px-[11px] text-[13px] font-normal text-text" type="password" autoComplete={autoComplete} {...register(name)} />
+            {errors[name] && <span className="font-normal text-error">{errors[name]?.message}</span>}
           </label>
         ))}
-        <button className="button button-primary" type="submit" disabled={isSubmitting}>
+        <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-[14px] text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.16)] hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Changing password..." : "Change password"}
         </button>
       </form>
