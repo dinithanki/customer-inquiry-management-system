@@ -1,10 +1,10 @@
 
-import type { Response, NextFunction } from "express";
-import type { AuthenticatedRequest } from "./auth.middleware.js";
+import type { Request, Response, NextFunction } from "express";
+import "./auth.middleware.js";
 import { pool } from "../config/database.js";
 
 export async function requirePasswordChangeComplete(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {

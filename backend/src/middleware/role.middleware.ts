@@ -1,9 +1,9 @@
 
-import type { Response, NextFunction } from "express";
-import type { AuthenticatedRequest } from "./auth.middleware.js";
+import type { Request, Response, NextFunction } from "express";
+import "./auth.middleware.js";
 
 export function requireAdmin(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): void {
@@ -27,7 +27,7 @@ export function requireAdmin(
 }
 
 export function requireStaff(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): void {

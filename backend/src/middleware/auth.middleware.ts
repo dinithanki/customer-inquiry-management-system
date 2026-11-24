@@ -14,8 +14,16 @@ export interface AuthenticatedRequest extends Request {
   };
 }
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: AuthenticatedRequest["user"];
+    }
+  }
+}
+
 export async function requireAuth(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
