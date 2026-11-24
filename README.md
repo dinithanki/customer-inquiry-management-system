@@ -1,55 +1,27 @@
 # Customer Inquiry Management System
 
-\<p align="center">
-&#x20; \<strong>A secure, full-stack platform for managing customer inquiries and support workflows.\</strong>
-\</p>
+A full-stack web application for managing customer inquiries, support workflows, and staff operations.
 
-\<p align="center">
-&#x20; \<a href="[https://customer-inquiry-management-system-alpha.vercel.app/](https://customer-inquiry-management-system-alpha.vercel.app/)">Live Application\</a> ·
-&#x20; \<a href="[https://customer-inquiry-management-system-mqze.onrender.com/api-docs](https://customer-inquiry-management-system-mqze.onrender.com/api-docs)">API Documentation\</a> ·
-&#x20; \<a href="docs/ERD.md">Database ER Diagram\</a> ·
-&#x20; \<a href="DECISIONS.md">Design Decisions\</a>
-\</p>
+[Live Application](https://customer-inquiry-management-system-alpha.vercel.app/) · [API Documentation](https://customer-inquiry-management-system-mqze.onrender.com/api-docs) · [Database ER Diagram](docs/ERD.md) · [Design Decisions](DECISIONS.md)
 
-\<p align="center">
-&#x20; \<img src="[https://img.shields.io/badge/Next.js-16-black?logo=next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)" alt="Next.js" />
-&#x20; \<img src="[https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black](https://img.shields.io/badge/React-19-61DAFB?logo=react\&logoColor=black)" alt="React" />
-&#x20; \<img src="[https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript\&logoColor=white)" alt="TypeScript" />
-&#x20; \<img src="[https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white](https://img.shields.io/badge/Node.js-339933?logo=node.js\&logoColor=white)" alt="Node.js" />
-&#x20; \<img src="[https://img.shields.io/badge/Express-000000?logo=express](https://img.shields.io/badge/Express-000000?logo=express)" alt="Express" />
-&#x20; \<img src="[https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql\&logoColor=white)" alt="PostgreSQL" />
-&#x20; \<img src="[https://img.shields.io/badge/License-MIT-green.svg](https://img.shields.io/badge/License-MIT-green.svg)" alt="MIT License" />
-\</p>
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js) ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript) ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql)
 
 ---
 
 ## Overview
 
-The **Customer Inquiry Management System** is a full-stack web application designed to help customer service teams record, organize, track, and manage customer inquiries through a centralized workspace.
+The Customer Inquiry Management System provides a centralized workspace where customer service teams can record, track, and manage customer inquiries.
 
-The system provides secure authentication, role-based access control, inquiry lifecycle management, duplicate detection, audit history, and staff administration.
+The application includes secure authentication, role-based access control, inquiry lifecycle management, duplicate detection, staff administration, and audit history.
 
-It follows a separated frontend and backend architecture, with a Next.js application communicating with a REST API built using Node.js and Express. PostgreSQL is used for persistent data storage.
-
-## Live Application
-
-| Component       | URL                                                                                                     |
-| --------------- | ------------------------------------------------------------------------------------------------------- |
-| Frontend        | [Open Application](https://customer-inquiry-management-system-alpha.vercel.app/)                        |
-| Backend API     | [Open API](https://customer-inquiry-management-system-mqze.onrender.com/api)                            |
-| Swagger UI      | [Explore API Documentation](https://customer-inquiry-management-system-mqze.onrender.com/api-docs)      |
-| API Health      | [Check Backend Health](https://customer-inquiry-management-system-mqze.onrender.com/api/health)         |
-| Database Health | [Check Database Connection](https://customer-inquiry-management-system-mqze.onrender.com/api/health/db) |
-
----
+It is built with a separate frontend and backend architecture, using PostgreSQL for persistent data storage.
 
 ## Features
 
 ### Authentication and Security
-
 - Secure user authentication.
 - JWT-based access authentication.
-- Access tokens stored in HttpOnly cookies.
+- HttpOnly cookie-based token storage.
 - Refresh token rotation and session management.
 - Password hashing using bcrypt.
 - Protected frontend routes.
@@ -58,9 +30,8 @@ It follows a separated frontend and backend architecture, with a Next.js applica
 - Session invalidation for deactivated users.
 
 ### Inquiry Management
-
 - Create and manage customer inquiries.
-- View inquiry details.
+- View detailed inquiry information.
 - Search and filter inquiries.
 - Paginated inquiry listing.
 - Update inquiry statuses.
@@ -72,7 +43,6 @@ It follows a separated frontend and backend architecture, with a Next.js applica
 - Optimistic concurrency control to prevent stale updates.
 
 ### Staff Management
-
 - ADMIN and STAFF roles.
 - Create and update staff accounts.
 - Activate and deactivate staff accounts.
@@ -81,7 +51,6 @@ It follows a separated frontend and backend architecture, with a Next.js applica
 - Session revocation when staff accounts are deactivated or passwords are reset.
 
 ### Data Integrity
-
 - Frontend and backend validation.
 - Controlled inquiry status transitions.
 - Normalized contact information for duplicate detection.
@@ -89,72 +58,109 @@ It follows a separated frontend and backend architecture, with a Next.js applica
 - Audit information for important inquiry actions.
 - Parameterized database queries.
 
----
-
 ## Technology Stack
 
-| Category             | Technologies                  |
-| -------------------- | ----------------------------- |
-| Frontend Framework   | Next.js                       |
-| UI Library           | React                         |
-| Programming Language | TypeScript                    |
-| Styling              | Tailwind CSS                  |
-| Authentication State | Zustand                       |
-| HTTP Client          | Axios                         |
-| Form Management      | React Hook Form               |
-| Form Validation      | Zod                           |
-| Icons                | Lucide React                  |
-| Backend Runtime      | Node.js                       |
-| Backend Framework    | Express.js                    |
-| Database             | PostgreSQL                    |
-| Password Hashing     | bcrypt                        |
-| Authentication       | JWT                           |
-| API Documentation    | Swagger / OpenAPI             |
-| Frontend Testing     | Vitest, React Testing Library |
-| Backend Testing      | Vitest, Supertest             |
-| Frontend Hosting     | Vercel                        |
-| Backend Hosting      | Render                        |
-| Database Hosting     | Neon                          |
-| Version Control      | Git and GitHub                |
+| Category | Technologies |
+|---|---|
+| Frontend Framework | Next.js |
+| UI Library | React |
+| Programming Language | TypeScript |
+| Styling | Tailwind CSS |
+| State Management | Zustand |
+| HTTP Client | Axios |
+| Form Management | React Hook Form |
+| Form Validation | Zod |
+| Icons | Lucide React |
+| Backend Runtime | Node.js |
+| Backend Framework | Express.js |
+| Database | PostgreSQL |
+| Authentication | JWT, HttpOnly Cookies |
+| Password Hashing | bcrypt |
+| API Documentation | Swagger / OpenAPI |
+| Frontend Testing | Vitest, React Testing Library |
+| Backend Testing | Vitest, Supertest |
+| Frontend Hosting | Vercel |
+| Backend Hosting | Render |
+| Database Hosting | Neon |
+| Version Control | Git and GitHub |
 
 ---
 
-## System Architecture
+## High-Level Architecture
 
-The application uses a separated frontend and backend architecture.
+The application follows a three-tier architecture consisting of the presentation layer, application layer, and data layer.
+
+The frontend handles user interactions and communicates with the backend through HTTPS requests. The backend manages authentication, authorization, request validation, business logic, and database operations.
+
+### Architecture Diagram
 
 ```mermaid
 flowchart TB
-    USER["User"]
+    USER(["Users<br/>ADMIN / STAFF"])
 
-    subgraph FRONTEND["Frontend - Next.js"]
-        UI["React User Interface"]
-        FORMS["Forms and Validation"]
-        STORE["Zustand Authentication State"]
+    subgraph FRONTEND["Presentation Layer - Next.js"]
+        UI["React UI Components"]
+        PAGES["Application Pages"]
+        FORMS["Forms and Zod Validation"]
+        STATE["Zustand Authentication State"]
         CLIENT["Axios API Client"]
+
+        USER --> UI
+        UI --> PAGES
+        PAGES --> FORMS
+        PAGES --> STATE
+        FORMS --> CLIENT
+        STATE --> CLIENT
     end
 
-    subgraph BACKEND["Backend - Node.js and Express"]
-        API["REST API"]
+    subgraph BACKEND["Application Layer - Node.js / Express"]
+        ROUTES["REST API Routes"]
         AUTH["Authentication Middleware"]
-        RBAC["Role Authorization"]
+        RBAC["Role-Based Authorization"]
         VALIDATION["Request Validation"]
-        SERVICES["Business Logic"]
+        CONTROLLERS["Controllers"]
+        SERVICES["Business Logic Services"]
+        DB_ACCESS["Database Access"]
+
+        ROUTES --> AUTH
+        AUTH --> RBAC
+        RBAC --> VALIDATION
+        VALIDATION --> CONTROLLERS
+        CONTROLLERS --> SERVICES
+        SERVICES --> DB_ACCESS
     end
 
-    DB[("PostgreSQL Database")]
+    subgraph DATA["Data Layer - PostgreSQL"]
+        USERS[("Users")]
+        INQUIRIES[("Inquiries")]
+        TOKENS[("Refresh Tokens")]
+        HISTORY[("Inquiry Status History")]
+    end
 
-    USER --> UI
-    UI --> FORMS
-    UI --> STORE
-    FORMS --> CLIENT
-    CLIENT -->|"HTTPS Requests"| API
-    API --> AUTH
-    AUTH --> RBAC
-    RBAC --> VALIDATION
-    VALIDATION --> SERVICES
-    SERVICES --> DB
+    CLIENT -->|"HTTPS / JSON"| ROUTES
+    DB_ACCESS --> USERS
+    DB_ACCESS --> INQUIRIES
+    DB_ACCESS --> TOKENS
+    DB_ACCESS --> HISTORY
 ```
+
+### Main Components
+
+| Component | Responsibility |
+|---|---|
+| Next.js Frontend | Provides the user interface and application navigation. |
+| React Components | Render reusable interface elements and pages. |
+| React Hook Form and Zod | Manage form state and frontend validation. |
+| Zustand | Maintains authentication-related frontend state. |
+| Axios | Handles communication with the backend API. |
+| Express REST API | Exposes endpoints for authentication, inquiries, and staff management. |
+| Authentication Middleware | Verifies authentication and user sessions. |
+| Authorization Middleware | Enforces ADMIN and STAFF permissions. |
+| Validation Layer | Validates incoming API requests. |
+| Controllers | Handle API requests and responses. |
+| Business Logic Services | Implement inquiry workflows, duplicate detection, and status transitions. |
+| Database Access | Handles PostgreSQL operations. |
+| PostgreSQL | Persists users, inquiries, refresh tokens, and status history. |
 
 ### Authentication Flow
 
@@ -167,52 +173,58 @@ sequenceDiagram
 
     User->>Frontend: Enter login credentials
     Frontend->>API: POST /api/auth/login
-    API->>DB: Retrieve user
+    API->>DB: Retrieve user account
     DB-->>API: User information
     API->>API: Verify password
-    API->>API: Generate access and refresh tokens
+    API->>API: Generate tokens
     API-->>Frontend: Set HttpOnly cookies
     Frontend-->>User: Redirect to application
 
     Frontend->>API: Request protected resource
-    API->>API: Validate access token and session
+    API->>API: Verify token and session
     API-->>Frontend: Return authorized response
 ```
 
-### Inquiry Workflow
+### Deployment Architecture
+
+The frontend, backend, and database are deployed as separate services.
 
 ```mermaid
-flowchart TD
-    A["Staff signs in"] --> B["Open inquiry workspace"]
-    B --> C["Create inquiry"]
-    C --> D["Validate inquiry information"]
-    D --> E{"Potential duplicate?"}
+flowchart TB
+    USER(["User Browser"])
 
-    E -->|Yes| F["Display matching inquiries"]
-    F --> G{"Confirm new inquiry?"}
-    G -->|No| B
-    G -->|Yes| H["Save inquiry"]
+    subgraph VERCEL["Vercel"]
+        FRONTEND["Next.js Frontend"]
+    end
 
-    E -->|No| H
+    subgraph RENDER["Render"]
+        BACKEND["Node.js / Express API"]
+        AUTH["Authentication and Business Logic"]
+    end
 
-    H --> I["NEW"]
-    I --> J["IN_PROGRESS"]
-    I --> K["RESOLVED"]
-    J --> K
-    K --> L{"Reopen?"}
-    L -->|Yes| J
-    L -->|No| M["Completed"]
+    subgraph NEON["Neon"]
+        DATABASE[("PostgreSQL Database")]
+    end
+
+    USER --> FRONTEND
+    FRONTEND -->|"HTTPS API Requests"| BACKEND
+    BACKEND --> AUTH
+    AUTH --> DATABASE
 ```
+
+| Component | Platform |
+|---|---|
+| Frontend | Vercel |
+| Backend API | Render |
+| Database | Neon PostgreSQL |
 
 ---
 
 ## Database Design
 
-The application uses PostgreSQL to store user accounts, inquiries, authentication sessions, and inquiry status history.
+PostgreSQL is used to store user accounts, customer inquiries, authentication sessions, and inquiry status history.
 
 ### Entity Relationship Diagram
-
-The following diagram shows the main database entities and their conceptual relationships.
 
 ```mermaid
 erDiagram
@@ -273,16 +285,16 @@ erDiagram
     }
 ```
 
-**Note:** This is a conceptual relationship diagram showing the main entities and their responsibilities. Refer to the actual SQL migration files for the exact column definitions, constraints, indexes, and foreign-key rules.
+**Note:** This is a conceptual diagram of the main entities. Refer to the SQL migration files for exact column definitions, constraints, indexes, and foreign-key rules.
 
 ### Entity Responsibilities
 
-| Entity                   | Responsibility                                                                 |
-| ------------------------ | ------------------------------------------------------------------------------ |
-| `users`                  | Stores administrator and staff account information.                            |
-| `inquiries`              | Stores customer inquiry details, status, audit references, and deletion state. |
-| `refresh_tokens`         | Stores hashed refresh tokens and session lifecycle information.                |
-| `inquiry_status_history` | Records inquiry status changes and the user responsible for each change.       |
+| Entity | Responsibility |
+|---|---|
+| `users` | Stores administrator and staff account information. |
+| `inquiries` | Stores customer inquiry details, status, audit references, and deletion state. |
+| `refresh_tokens` | Stores hashed refresh tokens and session lifecycle information. |
+| `inquiry_status_history` | Records inquiry status changes and the user responsible for each change. |
 
 For the standalone diagram, see [docs/ERD.md](docs/ERD.md).
 
@@ -292,47 +304,48 @@ For the standalone diagram, see [docs/ERD.md](docs/ERD.md).
 
 The system supports two user roles.
 
-| Feature                       | ADMIN | STAFF |
-| ----------------------------- | :---: | :---: |
-| Sign in                       |   ✓   |   ✓   |
-| View inquiries                |   ✓   |   ✓   |
-| Create inquiries              |   ✓   |   ✓   |
-| Search and filter inquiries   |   ✓   |   ✓   |
-| View inquiry details          |   ✓   |   ✓   |
-| Update inquiry status         |   ✓   |   ✓   |
-| View inquiry history          |   ✓   |   ✓   |
-| Soft-delete inquiries         |   ✓   |   —   |
-| View staff directory          |   ✓   |   —   |
-| Create and update staff       |   ✓   |   —   |
-| Activate and deactivate staff |   ✓   |   —   |
-| Reset staff passwords         |   ✓   |   —   |
+| Feature | ADMIN | STAFF |
+|---|:---:|:---:|
+| Sign in | ✓ | ✓ |
+| View inquiries | ✓ | ✓ |
+| Create inquiries | ✓ | ✓ |
+| Search and filter inquiries | ✓ | ✓ |
+| View inquiry details | ✓ | ✓ |
+| Update inquiry status | ✓ | ✓ |
+| View inquiry history | ✓ | ✓ |
+| Soft-delete inquiries | ✓ | — |
+| View staff directory | ✓ | — |
+| Create and update staff | ✓ | — |
+| Activate and deactivate staff | ✓ | — |
+| Reset staff passwords | ✓ | — |
 
 All permissions are enforced by the backend. Frontend route protection is not treated as a security boundary.
 
----
-
 ## Inquiry Lifecycle
 
-The application uses three inquiry statuses:
+The application uses three inquiry statuses.
 
-| Status        | Description                      |
-| ------------- | -------------------------------- |
-| `NEW`         | Newly recorded inquiry.          |
+| Status | Description |
+|---|---|
+| `NEW` | Newly recorded inquiry. |
 | `IN_PROGRESS` | Inquiry currently being handled. |
-| `RESOLVED`    | Inquiry that has been resolved.  |
+| `RESOLVED` | Inquiry that has been resolved. |
 
-### Allowed Transitions
+### Allowed Status Transitions
 
-| Current Status | Next Status |  Allowed |
-| -------------- | ----------- | :------: |
-| NEW            | IN_PROGRESS |     ✓    |
-| NEW            | RESOLVED    |     ✓    |
-| IN_PROGRESS    | RESOLVED    |     ✓    |
-| IN_PROGRESS    | NEW         |     ✗    |
-| RESOLVED       | IN_PROGRESS | ✓ Reopen |
-| RESOLVED       | NEW         |     ✗    |
+```mermaid
+flowchart TD
+    NEW["NEW"]
+    PROGRESS["IN_PROGRESS"]
+    RESOLVED["RESOLVED"]
 
-Invalid transitions are rejected by the backend.
+    NEW --> PROGRESS
+    NEW --> RESOLVED
+    PROGRESS --> RESOLVED
+    RESOLVED -->|"Reopen"| PROGRESS
+```
+
+Invalid status transitions are rejected by the backend.
 
 ---
 
@@ -354,7 +367,7 @@ Potential duplicates are identified using normalized contact information.
 When a potential duplicate is detected:
 
 1. The application displays matching active inquiries.
-2. The user can review the matches.
+2. The user can review the matching records.
 3. The user can confirm whether the new inquiry represents a separate issue.
 4. The backend independently checks the duplicate condition before creating the inquiry.
 
@@ -388,7 +401,6 @@ customer-inquiry-management-system/
 │   │   ├── validators/
 │   │   ├── app.ts
 │   │   └── server.ts
-│   │
 │   ├── migrations/
 │   ├── tests/
 │   ├── .env.example
@@ -404,7 +416,6 @@ customer-inquiry-management-system/
 │   │   ├── lib/
 │   │   ├── stores/
 │   │   └── tests/
-│   │
 │   ├── public/
 │   ├── package.json
 │   └── vitest.config.ts
@@ -422,25 +433,25 @@ customer-inquiry-management-system/
 └── CONTRIBUTING.md
 ```
 
-The directory tree is a high-level overview. Keep it updated if the actual repository structure changes.
+The directory tree provides a high-level overview. Actual files and folders may vary as the project develops.
 
 ---
 
-# Local Development Setup
+## Getting Started
 
-Follow these instructions to run the application locally on Windows, macOS, or Linux.
+Follow these instructions to run the application locally.
 
-## Prerequisites
+### Prerequisites
 
 Install the following:
 
 - [Node.js](https://nodejs.org/)
 - npm (included with Node.js)
 - [Git](https://git-scm.com/)
-- PostgreSQL database access (local PostgreSQL or a dedicated Neon test database)
+- PostgreSQL database access
 - VS Code or another code editor
 
-## 1. Clone the Repository
+### 1. Clone the Repository
 
 Open PowerShell or a terminal:
 
@@ -450,39 +461,28 @@ git clone https://github.com/dinithanki/customer-inquiry-management-system.git
 cd customer-inquiry-management-system
 ```
 
-## 2. Backend Installation
+### 2. Configure the Backend
 
-Navigate to the backend:
+Navigate to the backend directory:
 
-```bash
+```powershell
 cd backend
-```
-
-Install dependencies:
-
-```bash
 npm install
 ```
 
-## 3. Configure Backend Environment Variables
-
 Create a `.env` file inside the `backend/` directory.
-
-Use `backend/.env.example` as the reference if it is present.
-
-Configure the required values:
 
 ```env
 PORT=5000
 
 FRONTEND_ORIGIN=http://localhost:3000
 
-DATABASE_URL=YOUR_PRODUCTION_DATABASE_CONNECTION_STRING
-DATABASE_URL_TEST=YOUR_TEST_DATABASE_CONNECTION_STRING
+DATABASE_URL=YOUR_DATABASE_URL
+DATABASE_URL_TEST=YOUR_TEST_DATABASE_URL
 
 INITIAL_ADMIN_NAME=System Administrator
 INITIAL_ADMIN_EMAIL=admin@example.com
-INITIAL_ADMIN_PASSWORD=YOUR_STRONG_INITIAL_ADMIN_PASSWORD
+INITIAL_ADMIN_PASSWORD=YOUR_ADMIN_PASSWORD
 
 JWT_ACCESS_SECRET=YOUR_LONG_RANDOM_SECRET
 ACCESS_TOKEN_EXPIRES_IN=15m
@@ -494,21 +494,19 @@ Replace the example values with your own configuration.
 **Important:**
 
 - `DATABASE_URL` is the normal application database connection.
-- `DATABASE_URL_TEST` is the separate test/development database connection.
+- `DATABASE_URL_TEST` is the separate test database connection.
 - Never commit your `.env` file.
 - Never publish database passwords, JWT secrets, or administrator passwords.
 - Keep your development database separate from production.
 
-Use the exact variable names required by the backend configuration.
+### 3. Select the Development/Test Database
 
-## 4. Select the Development/Test Database
+The backend selects its database connection based on `NODE_ENV`.
 
-The backend chooses its database connection based on `NODE_ENV`.
-
-| Environment              | Database            |
-| ------------------------ | ------------------- |
-| `NODE_ENV=test`          | `DATABASE_URL_TEST` |
-| `NODE_ENV` is not `test` | `DATABASE_URL`      |
+| Environment | Database |
+|---|---|
+| `NODE_ENV=test` | `DATABASE_URL_TEST` |
+| Other environments | `DATABASE_URL` |
 
 For local development, select the test database.
 
@@ -518,15 +516,11 @@ In PowerShell, from the `backend/` directory:
 $env:NODE_ENV = "test"
 ```
 
-This setting applies to the current PowerShell terminal session.
+Keep this terminal in test mode while running the migration, seed, and backend commands below.
 
-Keep this terminal in test mode while running the local migration, seed, and backend commands below.
+### 4. Run Database Migrations
 
-## 5. Run Database Migrations
-
-Make sure your test database is available and that `DATABASE_URL_TEST` points to it.
-
-Run:
+Make sure your test database is available and `DATABASE_URL_TEST` points to it.
 
 ```bash
 npm run db:migrate
@@ -534,37 +528,29 @@ npm run db:migrate
 
 This applies the database migrations required by the application.
 
-Wait for the command to finish successfully before continuing.
+### 5. Create the Initial ADMIN Account
 
-## 6. Create the Initial ADMIN Account
-
-The application uses an initial administrator seed script.
-
-Before running it, check that the following environment variables are configured in `backend/.env`:
+Make sure the following environment variables are configured in `backend/.env`:
 
 ```env
 INITIAL_ADMIN_NAME=System Administrator
 INITIAL_ADMIN_EMAIL=admin@example.com
-INITIAL_ADMIN_PASSWORD=YOUR_STRONG_INITIAL_ADMIN_PASSWORD
+INITIAL_ADMIN_PASSWORD=YOUR_ADMIN_PASSWORD
 ```
 
-Run the seed command:
+Run the administrator seed command:
 
 ```bash
 npm run db:seed:admin
 ```
 
-The seed script uses the configured initial administrator details to bootstrap the administrator account.
+The seed script uses the configured administrator details to create the initial ADMIN account.
 
-Use the email and password you configured when signing in locally. If the seed script reports that an administrator already exists, follow the message rather than trying to insert another administrator manually.
+Use these credentials when signing in locally. Do not put your actual administrator password in this README or commit it to GitHub.
 
-**Security:** Do not put your actual administrator password in this README or commit it to GitHub.
-
-## 7. Start the Backend Server
+### 6. Start the Backend
 
 Keep `NODE_ENV=test` in the same PowerShell terminal.
-
-Run:
 
 ```bash
 npm run dev
@@ -572,59 +558,34 @@ npm run dev
 
 The backend should be available at:
 
-```text
-http://localhost:5000
-```
-
-Check the health endpoint:
-
-```text
-http://localhost:5000/api/health
-```
-
-Open Swagger documentation:
-
-```text
-http://localhost:5000/api-docs
-```
+- API: `http://localhost:5000`
+- Swagger: `http://localhost:5000/api-docs`
+- Health: `http://localhost:5000/api/health`
 
 Keep this terminal running.
 
-## 8. Frontend Installation
+### 7. Configure the Frontend
 
-Open a second terminal.
+Open a second terminal from the repository root:
 
-From the repository root:
-
-```bash
+```powershell
 cd frontend
-```
-
-Install frontend dependencies:
-
-```bash
 npm install
 ```
 
-Create a `.env.local` file inside `frontend/`:
+Create a `.env.local` file inside the `frontend/` directory:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
-## 9. Start the Frontend
-
-Run:
+### 8. Start the Frontend
 
 ```bash
 npm run dev
 ```
 
-Open the application:
-
-```text
-http://localhost:3000
-```
+Open [http://localhost:3000](http://localhost:3000).
 
 Sign in using the administrator email and password configured in the backend seed environment variables.
 
@@ -632,16 +593,14 @@ You can now use the application locally.
 
 ### Local Development Summary
 
-You should have two running terminals:
+You should have two running terminals.
 
-| Terminal   | Directory   | Command                            |
-| ---------- | ----------- | ---------------------------------- |
-| Terminal 1 | `backend/`  | `NODE_ENV=test` then `npm run dev` |
-| Terminal 2 | `frontend/` | `npm run dev`                      |
+| Terminal | Directory | Command |
+|---|---|---|
+| Terminal 1 | `backend/` | Set `NODE_ENV=test`, then run `npm run dev` |
+| Terminal 2 | `frontend/` | Run `npm run dev` |
 
-The frontend communicates with the backend through the local API URL.
-
-**Database safety:** Do not remove the `NODE_ENV=test` override before running local migrations or the seed command. In this project's configuration, the normal non-test mode selects `DATABASE_URL`, which is intended for production.
+**Database safety:** Do not remove the `NODE_ENV=test` override before running local migrations or the seed command. The normal non-test mode selects `DATABASE_URL`, which may point to production.
 
 ---
 
@@ -656,13 +615,13 @@ The backend provides REST API endpoints for authentication, staff management, an
 
 ### Main API Groups
 
-| API Group        | Description                           |
-| ---------------- | ------------------------------------- |
-| `/api/auth`      | Authentication and session management |
-| `/api/users`     | Staff and user management             |
-| `/api/inquiries` | Inquiry operations                    |
-| `/api/health`    | Backend health check                  |
-| `/api/health/db` | Database connectivity check           |
+| API Group | Description |
+|---|---|
+| `/api/auth` | Authentication and session management |
+| `/api/users` | Staff and user management |
+| `/api/inquiries` | Inquiry operations |
+| `/api/health` | Backend health check |
+| `/api/health/db` | Database connectivity check |
 
 Use Swagger UI to explore the available endpoints, request parameters, responses, and authentication requirements.
 
@@ -734,33 +693,23 @@ The test suites cover areas including:
 - Inquiry form validation.
 - Inquiry form interactions.
 
-See [backend/TESTING.md](backend/TESTING.md) for backend testing details.
+See [backend/TESTING.md](backend/TESTING.md) for additional backend testing information.
 
 Automated tests do not replace full manual verification of the deployed frontend, backend, and database working together.
 
 ---
 
-## Deployment Architecture
+## Deployment
 
 The application is deployed using separate frontend and backend hosting services.
 
-```mermaid
-flowchart TD
-    USER["User Browser"]
-    VERCEL["Vercel - Next.js Frontend"]
-    RENDER["Render - Express Backend"]
-    NEON[("Neon - PostgreSQL")]
-
-    USER --> VERCEL
-    VERCEL -->|"HTTPS API Requests"| RENDER
-    RENDER --> NEON
-```
-
 ### Frontend - Vercel
 
-- Hosting platform: Vercel
-- Root directory: `frontend`
-- Framework: Next.js
+| Setting | Value |
+|---|---|
+| Hosting Platform | Vercel |
+| Root Directory | `frontend` |
+| Framework | Next.js |
 
 Production environment variable:
 
@@ -770,21 +719,26 @@ NEXT_PUBLIC_API_URL=https://customer-inquiry-management-system-mqze.onrender.com
 
 ### Backend - Render
 
-- Hosting platform: Render
-- Root directory: `backend`
-- Build command: `npm install && npm run build`
-- Start command: `npm start`
+| Setting | Value |
+|---|---|
+| Hosting Platform | Render |
+| Root Directory | `backend` |
+| Build Command | `npm install && npm run build` |
+| Start Command | `npm start` |
 
-Configure the required production environment variables in the Render dashboard, including:
+Configure the required production environment variables in Render:
 
-- `NODE_ENV=production`
-- `DATABASE_URL`
-- `JWT_ACCESS_SECRET`
-- `FRONTEND_ORIGIN`
-- `BACKEND_URL`
-- Initial administrator variables when needed for the seed process
+```env
+NODE_ENV=production
+DATABASE_URL=YOUR_PRODUCTION_DATABASE_URL
+JWT_ACCESS_SECRET=YOUR_LONG_RANDOM_SECRET
+FRONTEND_ORIGIN=https://customer-inquiry-management-system-alpha.vercel.app
+BACKEND_URL=https://customer-inquiry-management-system-mqze.onrender.com
+```
 
-Render supplies the `PORT` variable.
+Also configure the initial administrator variables when required by the seed process.
+
+Render supplies the `PORT` environment variable.
 
 Before serving production traffic, ensure that migrations have been applied to the production database and the initial administrator account exists.
 
@@ -794,27 +748,23 @@ Never use your test database for production data.
 
 ## Additional Documentation
 
-| Document                                 | Description                                                        |
-| ---------------------------------------- | ------------------------------------------------------------------ |
-| [ERD.md](docs/ERD.md)                    | Database entity relationship diagram                               |
-| [DECISIONS.md](DECISIONS.md)             | Assumptions, design decisions, trade-offs, and future improvements |
-| [CONTRIBUTING.md](CONTRIBUTING.md)       | Contribution guidelines                                            |
-| [LICENSE](LICENSE)                       | MIT License                                                        |
-| [Backend TESTING.md](backend/TESTING.md) | Backend testing instructions                                       |
-
----
+| Document | Description |
+|---|---|
+| [DECISIONS.md](DECISIONS.md) | Assumptions, design decisions, trade-offs, and future improvements |
+| [docs/ERD.md](docs/ERD.md) | Database entity relationship diagram |
+| [backend/TESTING.md](backend/TESTING.md) | Backend testing information |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
+| [LICENSE](LICENSE) | Project license |
 
 ## Future Improvements
 
 Potential future enhancements include:
 
 - Real-time inquiry updates across multiple sessions.
-- Expanded end-to-end and integration testing.
+- Expanded integration and end-to-end testing.
 - Improved application logging and monitoring.
 - Inquiry analytics and reporting.
 - Further accessibility improvements.
-
----
 
 ## Contributing
 
@@ -822,15 +772,11 @@ Contributions, bug reports, and suggestions are welcome.
 
 Please read the [Contributing Guide](CONTRIBUTING.md) before submitting changes.
 
----
-
 ## License
 
 This project is licensed under the MIT License.
 
 See the [LICENSE](LICENSE) file for the complete license text.
-
----
 
 ## Author
 
@@ -841,4 +787,6 @@ See the [LICENSE](LICENSE) file for the complete license text.
 
 ---
 
-\<p align="center">   \<strong>Customer Inquiry Management System\</strong>   \<br />   Built with Next.js, TypeScript, Node.js, Express.js, and PostgreSQL. \</p>
+<p align="center">
+  Built with Next.js, TypeScript, Node.js, Express, and PostgreSQL.
+</p>
