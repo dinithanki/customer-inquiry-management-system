@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ChevronLeft, ChevronRight, KeyRound, Pencil, Plus, Search } from "lucide-react";
@@ -30,7 +30,15 @@ export default function StaffManagementClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [temporaryPassword, setTemporaryPassword] = useState("");
+  const [temporaryPasswordEmail, setTemporaryPasswordEmail] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [editingStaff, setEditingStaff] = useState<Staff | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editError, setEditError] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [resetTarget, setResetTarget] = useState<Staff | null>(null);
+  const [resettingPassword, setResettingPassword] = useState(false);
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<StaffValues>({
     resolver: zodResolver(staffSchema),
   });
@@ -63,6 +71,7 @@ export default function StaffManagementClient() {
     try {
       const data = await createStaff(values);
       setTemporaryPassword(data.temporaryPassword);
+      setTemporaryPasswordEmail(values.email);
       reset();
       setShowCreate(false);
       await load();
@@ -71,16 +80,31 @@ export default function StaffManagementClient() {
     }
   };
 
-  const edit = async (member: Staff) => {
-    const name = window.prompt("Staff name", member.name)?.trim();
-    if (!name) return;
-    const email = window.prompt("Staff email", member.email)?.trim();
-    if (!email) return;
+  const edit = (member: Staff) => {
+    setEditingStaff(member);
+    setEditName(member.name);
+    setEditEmail(member.email);
+    setEditError("");
+  };
+
+  const saveEdit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!editingStaff) return;
+    const parsed = staffSchema.safeParse({ name: editName.trim(), email: editEmail.trim() });
+    if (!parsed.success) {
+      setEditError(parsed.error.issues[0]?.message ?? "Please check the name and email.");
+      return;
+    }
+    setEditError("");
+    setSavingEdit(true);
     try {
-      await updateStaff(member.id, { name, email });
+      await updateStaff(editingStaff.id, parsed.data);
+      setEditingStaff(null);
       await load();
     } catch (editError) {
-      setError(getApiErrorMessage(editError));
+      setEditError(getApiErrorMessage(editError));
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -93,14 +117,19 @@ export default function StaffManagementClient() {
     }
   };
 
-  const resetPassword = async (member: Staff) => {
-    if (!window.confirm(`Reset password for ${member.name}?`)) return;
+  const resetPassword = async () => {
+    if (!resetTarget) return;
+    setResettingPassword(true);
     try {
-      const data = await resetStaffPassword(member.id);
+      const data = await resetStaffPassword(resetTarget.id);
       setTemporaryPassword(data.temporaryPassword);
+      setTemporaryPasswordEmail(resetTarget.email);
+      setResetTarget(null);
       await load();
     } catch (resetError) {
       setError(getApiErrorMessage(resetError));
+    } finally {
+      setResettingPassword(false);
     }
   };
 
@@ -116,9 +145,9 @@ export default function StaffManagementClient() {
       } />
       {error && <div className="mx-5 my-4 rounded-lg border border-red-200 bg-red-50 px-3 py-[11px] text-xs leading-[1.5] text-red-700">{error}</div>}
       {temporaryPassword && (
-        <div className="mx-5 my-4 flex items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-[11px] text-xs leading-[1.5] text-amber-800">
-          <div className="grid gap-1.5"><strong>Temporary password</strong><code className="select-all text-[13px]">{temporaryPassword}</code></div>
-          <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-white px-[14px] text-[13px] font-semibold text-text hover:border-slate-300 hover:bg-surface-muted" type="button" onClick={() => void navigator.clipboard.writeText(temporaryPassword)}>Copy</button>
+        <div className="mx-3 my-4 flex flex-col gap-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-3 text-xs leading-[1.5] text-amber-800 sm:mx-5 sm:flex-row sm:items-center sm:justify-between sm:px-3 sm:py-[11px]">
+          <div className="grid min-w-0 flex-1 gap-1.5"><strong>Temporary password</strong><span>User email:</span><code className="select-all break-all">{temporaryPasswordEmail}</code><span className="mt-1">Password:</span><code className="select-all break-all text-[13px]">{temporaryPassword}</code></div>
+          <button className="inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-white px-[14px] text-[13px] font-semibold text-text hover:border-slate-300 hover:bg-surface-muted sm:min-h-10 sm:w-auto" type="button" onClick={() => void navigator.clipboard.writeText(temporaryPassword)}>Copy password</button>
         </div>
       )}
       {showCreate && (
@@ -141,7 +170,7 @@ export default function StaffManagementClient() {
             <article key={member.id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <div className="flex items-center gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-full bg-blue-50 font-bold text-primary">{member.name.trim().charAt(0).toUpperCase()}</span><div className="min-w-0"><h3 className="m-0 truncate text-sm font-bold text-slate-800">{member.name}</h3><p className="m-0 mt-1 break-all text-xs text-muted">{member.email}</p></div><span className={`ml-auto rounded-full px-2 py-1 text-[10px] font-bold ${member.is_active ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-500"}`}>{member.is_active ? "Active" : "Inactive"}</span></div>
               <p className="mb-0 mt-3 text-[11px] text-muted">{member.must_change_password ? "Temporary password pending" : "Password changed"}</p>
-              <div className="mt-3 flex gap-2 border-t border-slate-100 pt-3"><button className="inline-flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600" type="button" onClick={() => void edit(member)}><Pencil size={14} />Edit</button><button className="min-h-10 flex-1 rounded-lg border border-slate-200 px-2 text-xs font-semibold text-slate-600" type="button" onClick={() => void toggleStatus(member)}>{member.is_active ? "Deactivate" : "Activate"}</button><button className="inline-flex size-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600" type="button" aria-label={`Reset password for ${member.name}`} onClick={() => void resetPassword(member)}><KeyRound size={15} /></button></div>
+              <div className="mt-3 flex gap-2 border-t border-slate-100 pt-3"><button className="inline-flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600" type="button" onClick={() => void edit(member)}><Pencil size={14} />Edit</button><button className="min-h-10 flex-1 rounded-lg border border-slate-200 px-2 text-xs font-semibold text-slate-600" type="button" onClick={() => void toggleStatus(member)}>{member.is_active ? "Deactivate" : "Activate"}</button><button className="inline-flex size-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600" type="button" aria-label={`Reset password for ${member.name}`} onClick={() => setResetTarget(member)}><KeyRound size={15} /></button></div>
             </article>
           ))}</div>
           <div className="overflow-x-auto max-[640px]:hidden"><table className="w-full min-w-[900px] table-fixed border-collapse text-xs [&_td]:h-[68px] [&_td]:border-b [&_td]:border-slate-100 [&_td]:px-3.5 [&_td]:py-2 [&_td]:align-middle [&_td]:text-text [&_tbody_tr:last-child_td]:border-b-0 [&_th]:h-12 [&_th]:border-b [&_th]:border-border [&_th]:bg-slate-50/80 [&_th]:px-3.5 [&_th]:text-left [&_th]:text-[10px] [&_th]:font-bold [&_th]:tracking-[0.07em] [&_th]:text-slate-500 [&_th]:uppercase [&_th]:whitespace-nowrap [&_tbody_tr]:transition-colors [&_tbody_tr]:duration-[140ms] [&_tbody_tr:hover]:bg-blue-50/40">
@@ -164,7 +193,7 @@ export default function StaffManagementClient() {
                     <button className={`inline-flex h-9 min-w-[82px] items-center justify-center rounded-lg border border-slate-200 bg-white px-2 text-[11px] font-semibold transition-colors ${member.is_active ? "text-slate-500 hover:border-red-200 hover:bg-red-50 hover:text-error" : "text-success hover:border-green-200 hover:bg-green-50"}`} type="button" aria-label={`${member.is_active ? "Deactivate" : "Activate"} ${member.name}`} onClick={() => void toggleStatus(member)}>
                       {member.is_active ? "Deactivate" : "Activate"}
                     </button>
-                    <button className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-primary" type="button" title="Reset password" aria-label={`Reset password for ${member.name}`} onClick={() => void resetPassword(member)}><KeyRound size={15} /></button>
+                    <button className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-primary" type="button" title="Reset password" aria-label={`Reset password for ${member.name}`} onClick={() => setResetTarget(member)}><KeyRound size={15} /></button>
                   </div>
                 </td>
               </tr>
@@ -177,6 +206,30 @@ export default function StaffManagementClient() {
           <button className="inline-flex min-h-[34px] items-center justify-center gap-[5px] rounded-lg border border-slate-200 bg-white px-2.5 text-[11px] text-slate-600 shadow-sm transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 disabled:border-slate-100 disabled:bg-slate-50 disabled:text-slate-400 disabled:shadow-none disabled:opacity-100" type="button" disabled={page >= totalPages} onClick={() => setPage((value) => value + 1)}>Next<ChevronRight size={15} /></button>
         </div></div>
       </section>
+      {(editingStaff || resetTarget) && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/40 p-3 sm:items-center sm:p-4" onMouseDown={(event) => { if (event.target === event.currentTarget && !savingEdit && !resettingPassword) { setEditingStaff(null); setResetTarget(null); } }}>
+          {editingStaff && (
+            <section role="dialog" aria-modal="true" aria-labelledby="edit-staff-title" className="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-md overflow-y-auto rounded-xl border border-border bg-white p-4 shadow-xl sm:max-h-[calc(100dvh-2rem)] sm:p-5">
+              <h2 id="edit-staff-title" className="m-0 text-base font-bold text-slate-800">Edit staff member</h2>
+              <p className="mb-4 mt-1 text-xs text-muted">Update this staff account’s details.</p>
+              <form className="grid gap-3" onSubmit={(event) => void saveEdit(event)} noValidate>
+                <label className="grid gap-1.5 text-xs font-semibold text-slate-600">Name<input autoFocus className="h-10 rounded-lg border border-border px-3 text-[13px] font-normal text-text outline-none focus:border-primary focus:ring-2 focus:ring-blue-100" value={editName} onChange={(event) => setEditName(event.target.value)} /></label>
+                <label className="grid gap-1.5 text-xs font-semibold text-slate-600">Email<input type="email" className="h-10 rounded-lg border border-border px-3 text-[13px] font-normal text-text outline-none focus:border-primary focus:ring-2 focus:ring-blue-100" value={editEmail} onChange={(event) => setEditEmail(event.target.value)} /></label>
+                {editError && <p role="alert" className="m-0 text-xs text-error">{editError}</p>}
+                <div className="mt-2 flex flex-col-reverse gap-2 border-t border-border pt-3 sm:flex-row sm:justify-end"><button className="min-h-11 w-full rounded-lg border border-border px-4 text-[13px] font-semibold text-text hover:bg-surface-muted sm:w-auto" type="button" onClick={() => setEditingStaff(null)}>Cancel</button><button className="min-h-11 w-full rounded-lg bg-primary px-4 text-[13px] font-semibold text-white hover:bg-blue-700 disabled:opacity-60 sm:w-auto" type="submit" disabled={savingEdit}>{savingEdit ? "Saving..." : "Save changes"}</button></div>
+              </form>
+            </section>
+          )}
+          {resetTarget && (
+            <section role="dialog" aria-modal="true" aria-labelledby="reset-password-title" className="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-md overflow-y-auto rounded-xl border border-border bg-white p-4 shadow-xl sm:max-h-[calc(100dvh-2rem)] sm:p-5">
+              <div className="mb-3 grid size-10 place-items-center rounded-full bg-amber-50 text-amber-700"><KeyRound size={18} /></div>
+              <h2 id="reset-password-title" className="m-0 text-base font-bold text-slate-800">Reset password?</h2>
+              <p className="mb-5 mt-2 text-sm leading-6 text-muted">A new temporary password will be created for <strong className="text-slate-700">{resetTarget.name}</strong>. Their current password will stop working.</p>
+              <div className="flex flex-col-reverse gap-2 border-t border-border pt-3 sm:flex-row sm:justify-end"><button className="min-h-11 w-full rounded-lg border border-border px-4 text-[13px] font-semibold text-text hover:bg-surface-muted sm:w-auto" type="button" onClick={() => setResetTarget(null)} disabled={resettingPassword}>Cancel</button><button className="min-h-11 w-full rounded-lg bg-primary px-4 text-[13px] font-semibold text-white hover:bg-blue-700 disabled:opacity-60 sm:w-auto" type="button" onClick={() => void resetPassword()} disabled={resettingPassword}>{resettingPassword ? "Resetting..." : "Reset password"}</button></div>
+            </section>
+          )}
+        </div>
+      )}
     </>
   );
 }
