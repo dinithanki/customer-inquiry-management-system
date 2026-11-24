@@ -24,14 +24,16 @@ export default function LoginPage() {
   const setInitialized = useAuthStore((state) => state.setInitialized);
   const [serverError, setServerError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginValues>({
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
   });
 
   const submit = async (values: LoginValues) => {
     setServerError("");
     try {
       const user = await login(values.email, values.password);
+      reset({ email: "", password: "" });
       setUser(user);
       setInitialized(true);
       router.replace(user.must_change_password ? "/change-password" : "/dashboard");
@@ -70,7 +72,7 @@ export default function LoginPage() {
 
         {serverError && <div className="mb-5 -mt-3 rounded-[10px] border border-red-200 bg-red-50 px-3 py-[11px] text-xs leading-[1.5] text-red-700" role="alert">{serverError}</div>}
 
-        <form className="grid gap-5" onSubmit={handleSubmit(submit)} noValidate>
+        <form className="grid gap-5" onSubmit={handleSubmit(submit)} noValidate autoComplete="off">
           <div className="grid min-w-0 gap-2">
             <label className="text-xs font-semibold text-slate-700" htmlFor="login-email">Email address</label>
             <div className="flex min-h-12 items-center gap-[11px] rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-400 transition-[border-color,box-shadow,background,color] duration-150 focus-within:border-blue-400 focus-within:bg-white focus-within:text-primary focus-within:shadow-[0_0_0_4px_rgba(37,99,235,0.1)] [&:has(input[aria-invalid=true])]:border-red-300">
@@ -80,7 +82,7 @@ export default function LoginPage() {
                 id="login-email"
                 type="email"
                 placeholder="name@company.com"
-                autoComplete="email"
+                autoComplete="off"
                 aria-required="true"
                 aria-invalid={Boolean(errors.email)}
                 aria-describedby={errors.email ? "login-email-error" : undefined}
@@ -99,7 +101,7 @@ export default function LoginPage() {
                 id="login-password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 aria-required="true"
                 aria-invalid={Boolean(errors.password)}
                 aria-describedby={errors.password ? "login-password-error" : undefined}
