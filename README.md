@@ -389,6 +389,49 @@ Supported transitions:
 -   Request origin checks protect mutating browser requests.
 -   Environment secrets must remain outside source control.
 
+## Deployment to Vercel and Render
+
+The frontend and API can be deployed separately. Configure the Vercel
+project with `frontend` as its **Root Directory** and use the default
+Next.js install and build settings. Set this environment variable in
+Vercel for Production (and Preview only if you also configure the API to
+trust that preview origin):
+
+```text
+NEXT_PUBLIC_API_URL=https://YOUR-RENDER-SERVICE.onrender.com/api
+```
+
+Create a Render **Web Service** from this repository with `backend` as
+its **Root Directory**, build command `npm ci && npm run build`, and
+start command `npm start`. Configure these environment variables on
+Render:
+
+```text
+FRONTEND_ORIGIN=https://YOUR-VERCEL-DOMAIN.vercel.app
+DATABASE_URL=YOUR_PRODUCTION_POSTGRES_CONNECTION_STRING
+JWT_ACCESS_SECRET=YOUR_LONG_RANDOM_SECRET
+INITIAL_ADMIN_NAME=System Administrator
+INITIAL_ADMIN_EMAIL=YOUR_ADMIN_EMAIL
+INITIAL_ADMIN_PASSWORD=YOUR_STRONG_INITIAL_PASSWORD
+```
+
+Render supplies `PORT`. Use the exact frontend origin in
+`FRONTEND_ORIGIN` (scheme and host, without a trailing slash). The
+production login cookies use `SameSite=None; Secure` so browsers can send
+them from a Vercel frontend to a Render API. Keep the Vercel and Render
+services on HTTPS, and update `FRONTEND_ORIGIN` if the production
+frontend domain changes. Run `npm run db:migrate` from the backend
+directory against the production `DATABASE_URL` before the first
+deployment that serves traffic; create the initial administrator with
+`npm run db:seed:admin` if the database does not already have one.
+
+After deployment, confirm `https://YOUR-RENDER-SERVICE.onrender.com/api/health`
+returns successfully, then test login and a protected page in the
+deployed frontend. Some browsers or privacy settings block third-party
+cookies regardless of `SameSite`; if that affects your users, use
+frontend and API custom domains under the same site or proxy API requests
+through the frontend domain.
+
 ## Further Documentation
 
 -   [`backend/TESTING.md`](backend/TESTING.md) --- backend test

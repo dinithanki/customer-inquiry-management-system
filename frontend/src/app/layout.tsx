@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Inquiry Management",
+  title: "Inquiry Desk",
   description: "Customer inquiry management system",
 };
 

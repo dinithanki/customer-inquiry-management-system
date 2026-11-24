@@ -23,18 +23,24 @@ import { generateRefreshToken } from "../utils/refresh-token.js";
 // COOKIE CONFIGURATION
 // ==========================================
 
+const isProduction = process.env.NODE_ENV === "production";
+
+// Vercel and Render use different sites by default. Production cookies must
+// opt in to cross-site requests; browsers require Secure with SameSite=None.
+const cookieSameSite = isProduction ? ("none" as const) : ("lax" as const);
+
 const accessCookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax" as const,
+  secure: isProduction,
+  sameSite: cookieSameSite,
   maxAge: 15 * 60 * 1000,
   path: "/",
 };
 
 const refreshCookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax" as const,
+  secure: isProduction,
+  sameSite: cookieSameSite,
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: "/api/auth",
 };
@@ -122,15 +128,15 @@ export async function refresh(req: Request, res: Response) {
     if (!session) {
       res.clearCookie("accessToken", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        secure: isProduction,
+        sameSite: cookieSameSite,
         path: "/",
       });
 
       res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        secure: isProduction,
+        sameSite: cookieSameSite,
         path: "/api/auth",
       });
 
@@ -180,15 +186,15 @@ export async function logout(req: Request, res: Response) {
 
     res.clearCookie("accessToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: cookieSameSite,
       path: "/",
     });
 
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: cookieSameSite,
       path: "/api/auth",
     });
 
