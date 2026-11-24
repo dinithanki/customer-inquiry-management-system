@@ -30,6 +30,8 @@ const inquiryListQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(100).default(10),
   search: z.string().trim().optional(),
   status: z.enum(["NEW", "IN_PROGRESS", "RESOLVED"]).optional(),
+  sortBy: z.enum(["created_at", "customer_name"]).default("created_at"),
+  sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });
 
 const inquiryIdSchema = z.string().uuid();

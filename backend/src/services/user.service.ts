@@ -93,9 +93,13 @@ export async function createStaff(
 export async function getStaffList(
   page: number,
   limit: number,
-  search: string
+  search: string,
+  sortBy: "created_at" | "name" | "email" = "created_at",
+  sortOrder: "asc" | "desc" = "desc"
 ): Promise<StaffListResult> {
   const offset = (page - 1) * limit;
+  const sortColumn = { created_at: "created_at", name: "name", email: "email" }[sortBy];
+  const direction = sortOrder === "asc" ? "ASC" : "DESC";
 
   const result = await pool.query<Staff>(
     `SELECT
@@ -107,7 +111,7 @@ export async function getStaffList(
          name ILIKE $1
          OR email ILIKE $1
        )
-     ORDER BY created_at DESC
+     ORDER BY ${sortColumn} ${direction}, id ${direction}
      LIMIT $2 OFFSET $3`,
     [`%${search}%`, limit, offset]
   );

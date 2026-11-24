@@ -65,18 +65,18 @@ export default function DashboardPage() {
           <div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><span className="grid size-11 place-items-center rounded-xl bg-blue-50 text-primary"><Inbox size={20} /></span><h3 className="mt-1 mb-0 text-[15px] font-bold text-text">No inquiries yet</h3><p className="m-0 max-w-[420px] text-xs leading-[1.6]">Recent inquiries will appear here when they are available.</p></div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] table-fixed border-collapse text-xs [&_td]:h-[62px] [&_td]:border-b [&_td]:border-slate-100 [&_td]:text-text">
+            <table className="w-full min-w-[760px] table-fixed border-collapse text-xs [&_td]:h-[68px] [&_td]:border-b [&_td]:border-slate-100 [&_td]:align-middle [&_td]:text-text [&_tbody_tr:last-child_td]:border-b-0">
               <colgroup><col className="w-[27%]" /><col className="w-[28%]" /><col className="w-[17%]" /><col className="w-[15%]" /><col className="w-[13%]" /></colgroup>
-              <thead><tr><th className="h-11 border-b border-border bg-white px-3.5 text-left text-[10px] font-semibold uppercase tracking-[0.045em] whitespace-nowrap text-slate-500">Customer</th><th className="h-11 border-b border-border bg-white px-3.5 text-left text-[10px] font-semibold uppercase tracking-[0.045em] whitespace-nowrap text-slate-500">Subject</th><th className="h-11 border-b border-border bg-white px-3.5 text-left text-[10px] font-semibold uppercase tracking-[0.045em] whitespace-nowrap text-slate-500">Status</th><th className="h-11 border-b border-border bg-white px-3.5 text-left text-[10px] font-semibold uppercase tracking-[0.045em] whitespace-nowrap text-slate-500">Created</th><th className="h-11 border-b border-border bg-white px-3.5 text-center text-[10px] font-semibold uppercase tracking-[0.045em] whitespace-nowrap text-slate-500" aria-label="Actions"></th></tr></thead>
+              <thead><tr><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-left text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500">Customer</th><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-left text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500">Subject</th><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-left text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500">Status</th><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-left text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500">Created</th><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-center text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500" aria-label="Actions"></th></tr></thead>
               <tbody>{recent.map((inquiry) => (
-                <tr className="transition-colors duration-[140ms] hover:bg-slate-50" key={inquiry.id}>
+                <tr className="transition-colors duration-[140ms] hover:bg-blue-50/40" key={inquiry.id}>
                   <td>
-                    <div className="flex min-w-0 items-center gap-2.5 px-3.5 py-2">
-                      <span className="grid size-[34px] shrink-0 place-items-center rounded-full bg-blue-50 text-xs font-bold text-primary" aria-hidden="true">{inquiry.customer_name.trim().charAt(0).toUpperCase()}</span>
-                      <span className="grid min-w-0 gap-[3px]"><strong className="overflow-hidden text-ellipsis whitespace-nowrap">{inquiry.customer_name}</strong><small className="text-[10px] text-slate-400">#{inquiry.id.slice(0, 8)}</small></span>
+                    <div className="flex min-w-0 items-center gap-3 px-3.5 py-2">
+                      <span className="grid size-9 shrink-0 place-items-center rounded-full border border-blue-100 bg-blue-50 text-xs font-bold text-primary" aria-hidden="true">{inquiry.customer_name.trim().charAt(0).toUpperCase()}</span>
+                      <span className="grid min-w-0 gap-1"><strong className="overflow-hidden text-ellipsis whitespace-nowrap text-[12px] font-semibold text-slate-800">{inquiry.customer_name}</strong><small className="text-[10px] font-medium tracking-wide text-slate-400">#{inquiry.id.slice(0, 8)}</small></span>
                     </div>
                   </td>
-                  <td className="overflow-hidden text-ellipsis whitespace-nowrap px-3.5 py-2" title={inquiry.subject}>{inquiry.subject}</td>
+                  <td className="overflow-hidden text-ellipsis whitespace-nowrap px-3.5 py-2 text-[12px] font-medium text-slate-700" title={inquiry.subject}>{inquiry.subject}</td>
                   <td className="px-3.5 py-2"><StatusBadge status={inquiry.status} /></td>
                   <td className="px-3.5 py-2">
                     <time className="grid gap-[3px] whitespace-nowrap" dateTime={inquiry.created_at}>
@@ -84,7 +84,7 @@ export default function DashboardPage() {
                       <small className="text-[10px] text-slate-400">{new Date(inquiry.created_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</small>
                     </time>
                   </td>
-                  <td className="px-3.5 py-2 text-center"><Link className="inline-flex min-h-8 items-center justify-center whitespace-nowrap text-[11px] font-semibold text-primary no-underline hover:text-blue-700 hover:underline" href={`/inquiries/${inquiry.id}`}>View details</Link></td>
+                  <td className="px-3.5 py-2 text-center"><Link className="inline-flex min-h-8 items-center justify-center whitespace-nowrap rounded-md px-2 text-[11px] font-semibold text-primary no-underline transition-colors hover:bg-blue-50 hover:text-blue-700" href={`/inquiries/${inquiry.id}`}>View details <ArrowUpRight size={13} className="ml-1" /></Link></td>
                 </tr>
               ))}</tbody>
             </table>

@@ -35,6 +35,8 @@ export type InquiryFilters = {
   limit?: number;
   search?: string;
   status?: "NEW" | "IN_PROGRESS" | "RESOLVED";
+  sortBy?: "created_at" | "customer_name";
+  sortOrder?: "asc" | "desc";
 };
 
 export type InquiryListItem = {
@@ -316,6 +318,11 @@ export async function getInquiries(
   }
 
   const whereClause = `WHERE ${conditions.join(" AND ")}`;
+  const sortColumn = {
+    created_at: "created_at",
+    customer_name: "customer_name",
+  }[filters.sortBy ?? "created_at"];
+  const sortOrder = filters.sortOrder === "asc" ? "ASC" : "DESC";
 
   const countResult = await pool.query<{ total: string }>(
     `SELECT COUNT(*) AS total
@@ -341,7 +348,7 @@ export async function getInquiries(
        updated_at
      FROM inquiries
      ${whereClause}
-     ORDER BY created_at DESC, id DESC
+     ORDER BY ${sortColumn} ${sortOrder}, id ${sortOrder}
      LIMIT $${values.length + 1}
      OFFSET $${values.length + 2}`,
     [...values, limit, offset]

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, Inbox, LayoutDashboard, LogOut, Users } from "lucide-react";
 import { logout } from "@/services/auth.service";
@@ -19,7 +20,18 @@ export function Sidebar({ role = "ADMIN", open, collapsed, onClose, onToggleColl
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
   const clearAuth = useAuthStore((state) => state.clearAuth);
+  const [confirmLogout, setConfirmLogout] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  useEffect(() => {
+    if (!confirmLogout) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !isLoggingOut) setConfirmLogout(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [confirmLogout, isLoggingOut]);
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     try {
       await logout();
     } finally {
@@ -74,13 +86,26 @@ export function Sidebar({ role = "ADMIN", open, collapsed, onClose, onToggleColl
             </span>
           </div>
           <div className="flex items-center justify-between gap-2 px-[6px] group-data-[collapsed=true]:absolute group-data-[collapsed=true]:right-[19px] group-data-[collapsed=true]:bottom-[14px] group-data-[collapsed=true]:left-[19px] group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-0 max-[760px]:group-data-[collapsed=true]:static max-[760px]:group-data-[collapsed=true]:justify-between max-[760px]:group-data-[collapsed=true]:px-[6px]">
-            <button className="inline-flex h-[38px] min-w-0 items-center gap-[9px] rounded-lg border-0 bg-transparent px-2.5 text-xs text-slate-300 transition-[background,color] duration-150 hover:bg-white/[0.08] hover:text-white group-data-[collapsed=true]:first:hidden max-[760px]:group-data-[collapsed=true]:first:inline-flex" type="button" title="Logout" aria-label="Logout" onClick={() => void handleLogout()}><LogOut size={17} /><span className="group-data-[collapsed=true]:hidden max-[760px]:group-data-[collapsed=true]:inline">Log out</span></button>
+            <button className="inline-flex h-[38px] min-w-0 items-center gap-[9px] rounded-lg border-0 bg-transparent px-2.5 text-xs text-slate-300 transition-[background,color] duration-150 hover:bg-white/[0.08] hover:text-white group-data-[collapsed=true]:first:hidden max-[760px]:group-data-[collapsed=true]:first:inline-flex" type="button" title="Logout" aria-label="Logout" onClick={() => setConfirmLogout(true)}><LogOut size={17} /><span className="group-data-[collapsed=true]:hidden max-[760px]:group-data-[collapsed=true]:inline">Log out</span></button>
             <button className="inline-grid size-[38px] shrink-0 place-items-center rounded-lg border-0 bg-transparent text-inherit hover:bg-white/[0.08] group-data-[collapsed=true]:flex-[0_0_38px] group-data-[collapsed=true]:bg-white/[0.12] group-data-[collapsed=true]:text-white group-data-[collapsed=true]:hover:bg-white/20" type="button" title={collapsed ? "Expand sidebar" : "Collapse sidebar"} aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"} onClick={onToggleCollapsed}>
               {collapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
             </button>
           </div>
         </div>
       </aside>
+      {confirmLogout && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/45 p-4" onMouseDown={(event) => { if (event.target === event.currentTarget && !isLoggingOut) setConfirmLogout(false); }}>
+          <section className="w-full max-w-[420px] rounded-2xl border border-border bg-card p-6 shadow-[0_24px_70px_rgba(15,23,42,0.2)]" role="dialog" aria-modal="true" aria-labelledby="logout-title" aria-describedby="logout-description">
+            <div className="mb-4 grid size-11 place-items-center rounded-xl bg-blue-50 text-primary"><LogOut size={20} /></div>
+            <h2 id="logout-title" className="m-0 text-lg font-bold tracking-[-0.02em] text-text">Log out of your account?</h2>
+            <p id="logout-description" className="mb-0 mt-2 text-[13px] leading-5 text-muted">You’ll need to sign in again to access your inquiry workspace.</p>
+            <div className="mt-6 flex justify-end gap-2">
+              <button className="inline-flex min-h-10 items-center justify-center rounded-lg border border-border bg-white px-[14px] text-[13px] font-semibold text-text hover:border-slate-300 hover:bg-surface-muted disabled:opacity-60" type="button" disabled={isLoggingOut} onClick={() => setConfirmLogout(false)}>Cancel</button>
+              <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-[14px] text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.16)] hover:bg-blue-700 disabled:cursor-wait disabled:opacity-70" type="button" disabled={isLoggingOut} onClick={() => void handleLogout()}>{isLoggingOut ? "Logging out…" : "Log out"}</button>
+            </div>
+          </section>
+        </div>
+      )}
     </>
   );
 }

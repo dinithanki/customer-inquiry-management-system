@@ -53,4 +53,6 @@ export type InquiryFilters = {
   limit?: number;
   search?: string;
   status?: InquiryStatus;
+  sortBy?: "created_at" | "customer_name";
+  sortOrder?: "asc" | "desc";
 };

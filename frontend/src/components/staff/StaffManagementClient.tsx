@@ -22,6 +22,8 @@ export default function StaffManagementClient() {
   const role = useAuthStore((state) => state.user?.role);
   const [staff, setStaff] = useState<Staff[]>([]);
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<"created_at" | "name" | "email">("created_at");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const limit = 10;
@@ -37,7 +39,7 @@ export default function StaffManagementClient() {
     setLoading(true);
     setError("");
     try {
-      const data = await listStaff({ page, limit, search: search || undefined });
+      const data = await listStaff({ page, limit, search: search || undefined, sortBy, sortOrder });
       setStaff(data.staff);
       setTotal(data.total);
     } catch (loadError) {
@@ -45,7 +47,7 @@ export default function StaffManagementClient() {
     } finally {
       setLoading(false);
     }
-  }, [limit, page, search]);
+  }, [limit, page, search, sortBy, sortOrder]);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => { void load(); }, 0);
@@ -129,32 +131,32 @@ export default function StaffManagementClient() {
           </form>
         </section>
       )}
-      <section className="rounded-xl border border-border bg-card shadow-card">
-        <div className="flex min-h-16 items-center gap-2.5 border-b border-border px-5 py-3"><div className="flex h-10 w-[min(360px,100%)] items-center gap-2 rounded-lg border border-border px-2.5 text-muted"><Search size={16} /><input className="w-full border-0 bg-transparent text-[13px] text-text outline-none placeholder:text-slate-400" aria-label="Search staff" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search name or email" /></div></div>
+      <section className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+        <div className="flex min-h-16 flex-col gap-2.5 border-b border-border px-5 py-3 sm:flex-row sm:items-center sm:justify-between"><div className="flex h-10 w-full items-center gap-2 rounded-lg border border-border px-2.5 text-muted transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-blue-100 sm:max-w-[360px]"><Search size={16} /><input className="w-full border-0 bg-transparent text-[13px] text-text outline-none placeholder:text-slate-400" aria-label="Search staff" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search name or email" /></div><select className="h-10 w-full rounded-lg border border-border bg-white px-3 text-sm text-text outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-blue-100 sm:w-48" aria-label="Sort staff" value={`${sortBy}:${sortOrder}`} onChange={(event) => { const [nextSortBy, nextSortOrder] = event.target.value.split(":") as [typeof sortBy, typeof sortOrder]; setSortBy(nextSortBy); setSortOrder(nextSortOrder); setPage(1); }}><option value="created_at:desc">Newest first</option><option value="created_at:asc">Oldest first</option><option value="name:asc">Name A–Z</option><option value="name:desc">Name Z–A</option><option value="email:asc">Email A–Z</option><option value="email:desc">Email Z–A</option></select></div>
         {loading ? <div className="flex min-h-[220px] items-center justify-center text-muted">Loading staff...</div> : staff.length === 0 ? (
           <div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><h3 className="mt-1 mb-0 text-[15px] text-text">No staff found</h3><p className="m-0 max-w-[420px] text-xs leading-[1.6]">Create a staff account to get started.</p></div>
         ) : (
-          <div className="overflow-x-auto"><table className="w-full min-w-[900px] table-fixed border-collapse text-xs [&_td]:h-[68px] [&_td]:border-b [&_td]:border-slate-100 [&_td]:px-3.5 [&_td]:py-2 [&_td]:text-text [&_th]:h-11 [&_th]:border-b [&_th]:border-border [&_th]:bg-white [&_th]:px-3.5 [&_th]:text-left [&_th]:text-[10px] [&_th]:font-semibold [&_th]:tracking-[0.045em] [&_th]:text-slate-500 [&_th]:uppercase [&_th]:whitespace-nowrap [&_tbody_tr]:transition-colors [&_tbody_tr]:duration-[140ms] [&_tbody_tr:hover]:bg-slate-50">
+          <div className="overflow-x-auto"><table className="w-full min-w-[900px] table-fixed border-collapse text-xs [&_td]:h-[68px] [&_td]:border-b [&_td]:border-slate-100 [&_td]:px-3.5 [&_td]:py-2 [&_td]:align-middle [&_td]:text-text [&_tbody_tr:last-child_td]:border-b-0 [&_th]:h-12 [&_th]:border-b [&_th]:border-border [&_th]:bg-slate-50/80 [&_th]:px-3.5 [&_th]:text-left [&_th]:text-[10px] [&_th]:font-bold [&_th]:tracking-[0.07em] [&_th]:text-slate-500 [&_th]:uppercase [&_th]:whitespace-nowrap [&_tbody_tr]:transition-colors [&_tbody_tr]:duration-[140ms] [&_tbody_tr:hover]:bg-blue-50/40">
             <colgroup><col className="w-[21%]" /><col className="w-[22%]" /><col className="w-[14%]" /><col className="w-[21%]" /><col className="w-[22%]" /></colgroup>
             <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Password</th><th>Actions</th></tr></thead>
             <tbody>{staff.map((member) => (
               <tr key={member.id}>
                 <td>
                   <div className="flex min-w-0 items-center gap-2.5">
-                    <span className="grid size-[34px] shrink-0 place-items-center rounded-full bg-blue-50 text-xs font-bold text-primary" aria-hidden="true">{member.name.trim().charAt(0).toUpperCase()}</span>
-                    <strong className="overflow-hidden text-ellipsis whitespace-nowrap text-slate-800">{member.name}</strong>
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full border border-blue-100 bg-blue-50 text-xs font-bold text-primary" aria-hidden="true">{member.name.trim().charAt(0).toUpperCase()}</span>
+                    <strong className="overflow-hidden text-ellipsis whitespace-nowrap text-[12px] font-semibold text-slate-800">{member.name}</strong>
                   </div>
                 </td>
                 <td className="text-slate-500">{member.email}</td>
                 <td><span className={`inline-flex min-h-[26px] items-center gap-[7px] whitespace-nowrap rounded-full px-[9px] text-[11px] font-bold ${member.is_active ? "bg-green-50 text-success before:size-[7px] before:rounded-full before:bg-current before:content-['']" : "bg-slate-100 text-slate-500"}`}>{member.is_active ? "Active" : "Inactive"}</span></td>
                 <td><span className={`inline-flex min-h-[25px] items-center whitespace-nowrap rounded-full px-[9px] text-[10px] font-semibold ${member.must_change_password ? "bg-amber-50 text-amber-700" : "bg-slate-100 text-slate-500"}`}>{member.must_change_password ? "Temporary password" : "Password changed"}</span></td>
                 <td>
-                  <div className="flex items-center justify-start gap-[5px] whitespace-nowrap">
-                    <button className="inline-flex size-[34px] shrink-0 items-center justify-center rounded-[7px] border border-transparent bg-transparent px-0 text-slate-500 transition-colors hover:bg-slate-900/5 hover:text-primary" type="button" title="Edit staff member" aria-label={`Edit ${member.name}`} onClick={() => void edit(member)}><Pencil size={15} /></button>
-                    <button className={`inline-flex h-7 w-[82px] items-center justify-center rounded-md border-0 bg-transparent p-0 text-[11px] font-semibold transition-colors ${member.is_active ? "text-slate-500 hover:bg-red-50 hover:text-error" : "text-success hover:bg-green-50"}`} type="button" aria-label={`${member.is_active ? "Deactivate" : "Activate"} ${member.name}`} onClick={() => void toggleStatus(member)}>
+                  <div className="flex items-center justify-start gap-1 whitespace-nowrap">
+                    <button className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-primary" type="button" title="Edit staff member" aria-label={`Edit ${member.name}`} onClick={() => void edit(member)}><Pencil size={15} /></button>
+                    <button className={`inline-flex h-9 min-w-[82px] items-center justify-center rounded-lg border border-slate-200 bg-white px-2 text-[11px] font-semibold transition-colors ${member.is_active ? "text-slate-500 hover:border-red-200 hover:bg-red-50 hover:text-error" : "text-success hover:border-green-200 hover:bg-green-50"}`} type="button" aria-label={`${member.is_active ? "Deactivate" : "Activate"} ${member.name}`} onClick={() => void toggleStatus(member)}>
                       {member.is_active ? "Deactivate" : "Activate"}
                     </button>
-                    <button className="inline-flex size-[34px] shrink-0 items-center justify-center rounded-[7px] border border-transparent bg-transparent px-0 text-slate-500 transition-colors hover:bg-slate-900/5 hover:text-primary" type="button" title="Reset password" aria-label={`Reset password for ${member.name}`} onClick={() => void resetPassword(member)}><KeyRound size={15} /></button>
+                    <button className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-primary" type="button" title="Reset password" aria-label={`Reset password for ${member.name}`} onClick={() => void resetPassword(member)}><KeyRound size={15} /></button>
                   </div>
                 </td>
               </tr>

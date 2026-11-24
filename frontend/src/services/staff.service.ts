@@ -8,7 +8,7 @@ export type StaffListResult = {
   limit: number;
 };
 
-export async function listStaff(params: { page?: number; limit?: number; search?: string } = {}) {
+export async function listStaff(params: { page?: number; limit?: number; search?: string; sortBy?: "created_at" | "name" | "email"; sortOrder?: "asc" | "desc" } = {}) {
   const { data } = await api.get<{ success: boolean; data: StaffListResult }>("/users", { params });
   return data.data;
 }
