@@ -45,7 +45,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <Suspense fallback={null}>
           <TopNavbar title="Dashboard" role={role} onMenuClick={() => setOpen(true)} />
         </Suspense>
-        <main className="mx-auto w-full max-w-[1240px] px-8 py-8 max-[760px]:px-4 max-[760px]:py-6">{children}</main>
+        <main className="mx-auto w-full max-w-[1240px] px-8 py-8 max-[760px]:px-4 max-[760px]:py-5 max-[420px]:px-3">{children}</main>
       </div>
     </div>
   );

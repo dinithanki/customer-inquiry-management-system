@@ -207,7 +207,7 @@ export default function InquiriesPage() {
 
       {/* Statistics */}
       <section
-        className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4"
         aria-label="Inquiry summary"
       >
         <StatCard
@@ -347,8 +347,22 @@ export default function InquiriesPage() {
             </p>
           </div>
         ) : (
-          <div className="w-full overflow-x-auto">
-            <table className="w-full min-w-[1000px] table-fixed border-collapse text-sm">
+          <>
+          <div className="hidden space-y-3 p-3 max-[640px]:grid">
+            {inquiries.map((inquiry) => (
+              <article key={inquiry.id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="m-0 truncate text-sm font-bold text-slate-800">{inquiry.customer_name}</p><code className="mt-1 block text-[10px] text-slate-400">#{inquiry.id.slice(0, 8)}</code></div><StatusBadge status={inquiry.status} /></div>
+                <div className="mt-3 grid gap-1.5 text-xs"><span className="line-clamp-2 font-semibold text-slate-700">{inquiry.subject}</span><span className="font-medium text-slate-600">{inquiry.contact_method.replace("_", " ")}</span><span className="break-all text-muted">{inquiry.contact}</span><time className="text-muted" dateTime={inquiry.created_at}>{new Date(inquiry.created_at).toLocaleDateString()} · {new Date(inquiry.created_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</time></div>
+                <div className="mt-4 flex items-center justify-end gap-2 border-t border-slate-100 pt-3">
+                  <Link href={`/inquiries/${inquiry.id}`} aria-label="View inquiry" className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-slate-200 px-3 text-xs font-semibold text-primary no-underline"><Eye size={15} />View</Link>
+                  <button type="button" aria-label={inquiry.status === "NEW" ? "Start inquiry" : inquiry.status === "IN_PROGRESS" ? "Resolve inquiry" : "Reopen inquiry"} onClick={() => void advance(inquiry)} className="inline-flex size-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600">{inquiry.status === "RESOLVED" ? <RotateCcw size={16} /> : <ArrowRight size={16} />}</button>
+                  {role === "ADMIN" && <button type="button" aria-label="Delete inquiry" onClick={() => setInquiryToDelete(inquiry)} className="inline-flex size-10 items-center justify-center rounded-lg border border-red-100 text-red-600"><Trash2 size={16} /></button>}
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="w-full overflow-x-auto max-[640px]:hidden">
+            <table className="w-full min-w-[850px] table-fixed border-collapse text-sm">
 
               {/* Fixed column widths: total 100% */}
               <colgroup>
@@ -521,6 +535,7 @@ export default function InquiriesPage() {
               </tbody>
             </table>
           </div>
+          </>
         )}
 
         {/* Pagination */}

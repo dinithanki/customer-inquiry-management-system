@@ -19,7 +19,10 @@
   html,
   body {
     min-height: 100%;
+    width: 100%;
   }
+
+  html { overflow-x: clip; }
 
   body {
     margin: 0;
@@ -47,6 +50,12 @@
 
   button:disabled {
     cursor: not-allowed;
+  }
+
+  input, select, textarea { max-width: 100%; }
+
+  @media (max-width: 640px) {
+    input, select, textarea { font-size: 16px; }
   }
 
   button:focus-visible,

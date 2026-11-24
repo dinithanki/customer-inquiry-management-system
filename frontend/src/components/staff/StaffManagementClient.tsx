@@ -136,7 +136,15 @@ export default function StaffManagementClient() {
         {loading ? <div className="flex min-h-[220px] items-center justify-center text-muted">Loading staff...</div> : staff.length === 0 ? (
           <div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><h3 className="mt-1 mb-0 text-[15px] text-text">No staff found</h3><p className="m-0 max-w-[420px] text-xs leading-[1.6]">Create a staff account to get started.</p></div>
         ) : (
-          <div className="overflow-x-auto"><table className="w-full min-w-[900px] table-fixed border-collapse text-xs [&_td]:h-[68px] [&_td]:border-b [&_td]:border-slate-100 [&_td]:px-3.5 [&_td]:py-2 [&_td]:align-middle [&_td]:text-text [&_tbody_tr:last-child_td]:border-b-0 [&_th]:h-12 [&_th]:border-b [&_th]:border-border [&_th]:bg-slate-50/80 [&_th]:px-3.5 [&_th]:text-left [&_th]:text-[10px] [&_th]:font-bold [&_th]:tracking-[0.07em] [&_th]:text-slate-500 [&_th]:uppercase [&_th]:whitespace-nowrap [&_tbody_tr]:transition-colors [&_tbody_tr]:duration-[140ms] [&_tbody_tr:hover]:bg-blue-50/40">
+          <>
+          <div className="hidden space-y-3 p-3 max-[640px]:grid">{staff.map((member) => (
+            <article key={member.id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-full bg-blue-50 font-bold text-primary">{member.name.trim().charAt(0).toUpperCase()}</span><div className="min-w-0"><h3 className="m-0 truncate text-sm font-bold text-slate-800">{member.name}</h3><p className="m-0 mt-1 break-all text-xs text-muted">{member.email}</p></div><span className={`ml-auto rounded-full px-2 py-1 text-[10px] font-bold ${member.is_active ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-500"}`}>{member.is_active ? "Active" : "Inactive"}</span></div>
+              <p className="mb-0 mt-3 text-[11px] text-muted">{member.must_change_password ? "Temporary password pending" : "Password changed"}</p>
+              <div className="mt-3 flex gap-2 border-t border-slate-100 pt-3"><button className="inline-flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600" type="button" onClick={() => void edit(member)}><Pencil size={14} />Edit</button><button className="min-h-10 flex-1 rounded-lg border border-slate-200 px-2 text-xs font-semibold text-slate-600" type="button" onClick={() => void toggleStatus(member)}>{member.is_active ? "Deactivate" : "Activate"}</button><button className="inline-flex size-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600" type="button" aria-label={`Reset password for ${member.name}`} onClick={() => void resetPassword(member)}><KeyRound size={15} /></button></div>
+            </article>
+          ))}</div>
+          <div className="overflow-x-auto max-[640px]:hidden"><table className="w-full min-w-[900px] table-fixed border-collapse text-xs [&_td]:h-[68px] [&_td]:border-b [&_td]:border-slate-100 [&_td]:px-3.5 [&_td]:py-2 [&_td]:align-middle [&_td]:text-text [&_tbody_tr:last-child_td]:border-b-0 [&_th]:h-12 [&_th]:border-b [&_th]:border-border [&_th]:bg-slate-50/80 [&_th]:px-3.5 [&_th]:text-left [&_th]:text-[10px] [&_th]:font-bold [&_th]:tracking-[0.07em] [&_th]:text-slate-500 [&_th]:uppercase [&_th]:whitespace-nowrap [&_tbody_tr]:transition-colors [&_tbody_tr]:duration-[140ms] [&_tbody_tr:hover]:bg-blue-50/40">
             <colgroup><col className="w-[21%]" /><col className="w-[22%]" /><col className="w-[14%]" /><col className="w-[21%]" /><col className="w-[22%]" /></colgroup>
             <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Password</th><th>Actions</th></tr></thead>
             <tbody>{staff.map((member) => (
@@ -162,6 +170,7 @@ export default function StaffManagementClient() {
               </tr>
             ))}</tbody>
           </table></div>
+          </>
         )}
         <div className="flex min-h-[58px] items-center justify-between border-t border-border px-5 py-2.5 text-xs text-muted"><span>{total} staff accounts</span><div className="flex gap-1.5">
           <button className="inline-flex min-h-[34px] items-center justify-center gap-[5px] rounded-lg border border-slate-200 bg-white px-2.5 text-[11px] text-slate-600 shadow-sm transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 disabled:border-slate-100 disabled:bg-slate-50 disabled:text-slate-400 disabled:shadow-none disabled:opacity-100" type="button" disabled={page <= 1} onClick={() => setPage((value) => value - 1)}><ChevronLeft size={15} />Previous</button>

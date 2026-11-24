@@ -129,9 +129,9 @@ export default function NewInquiryPage() {
             <textarea className="min-h-[130px] w-full resize-y rounded-lg border border-border bg-white px-[11px] py-2.5 text-[13px] font-normal text-text" {...register("description")} />
             {errors.description && <span className="text-[11px] font-normal text-error">{errors.description.message}</span>}
           </label>
-          <div className="mt-1 flex justify-end gap-2 border-t border-border pt-[14px]">
-            <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-white px-[14px] text-[13px] font-semibold text-text hover:border-slate-300 hover:bg-surface-muted" type="button" onClick={() => router.back()} disabled={isSubmitting}>Cancel</button>
-            <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-[14px] text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.16)] hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60" type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : duplicates.length > 0 ? "Confirm & Create" : "Create Inquiry"}</button>
+          <div className="mt-1 flex justify-end gap-2 border-t border-border pt-[14px] max-[420px]:flex-col-reverse">
+            <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-white px-[14px] text-[13px] font-semibold text-text hover:border-slate-300 hover:bg-surface-muted max-[420px]:w-full" type="button" onClick={() => router.back()} disabled={isSubmitting}>Cancel</button>
+            <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-[14px] text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.16)] hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 max-[420px]:w-full" type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : duplicates.length > 0 ? "Confirm & Create" : "Create Inquiry"}</button>
           </div>
         </form>
       </section>

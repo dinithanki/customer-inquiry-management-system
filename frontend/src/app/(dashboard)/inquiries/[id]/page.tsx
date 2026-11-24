@@ -65,7 +65,7 @@ export default function InquiryDetailsPage({ params }: { params: Promise<{ id: s
     <>
       <PageHeader title={`Inquiry ${inquiry.id.slice(0, 8)}`} description="Customer information and status history." />
       {error && <div className="my-4 flex items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-3 py-[11px] text-xs leading-[1.5] text-red-700"><span>{error}</span><button className="border-0 bg-transparent text-xs font-semibold text-red-700 underline" type="button" onClick={() => void load()}>Reload</button></div>}
-      <section className="grid grid-cols-[minmax(0,1fr)_300px] gap-4 max-[760px]:grid-cols-1">
+        <section className="grid grid-cols-[minmax(0,1fr)_300px] gap-4 max-[900px]:grid-cols-1">
         <article className="rounded-xl border border-border bg-card shadow-card">
           <div className="flex min-h-[72px] items-center justify-between gap-3 px-5 py-[14px]"><div><h2 className="mb-1 text-[15px] font-bold text-slate-800">Customer details</h2><p className="m-0 text-xs text-muted">Submitted inquiry information</p></div><StatusBadge status={inquiry.status} /></div>
           <dl className="grid grid-cols-2 px-5 pb-5 max-[760px]:grid-cols-1">

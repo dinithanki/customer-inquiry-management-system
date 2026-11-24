@@ -64,7 +64,16 @@ export default function DashboardPage() {
         {loading ? <div className="flex min-h-[220px] items-center justify-center text-muted">Loading inquiries...</div> : recent.length === 0 ? (
           <div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><span className="grid size-11 place-items-center rounded-xl bg-blue-50 text-primary"><Inbox size={20} /></span><h3 className="mt-1 mb-0 text-[15px] font-bold text-text">No inquiries yet</h3><p className="m-0 max-w-[420px] text-xs leading-[1.6]">Recent inquiries will appear here when they are available.</p></div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+          <div className="hidden space-y-2 p-3 max-[640px]:grid">
+            {recent.map((inquiry) => (
+              <Link key={inquiry.id} href={`/inquiries/${inquiry.id}`} className="block rounded-xl border border-slate-200 bg-white p-4 text-inherit no-underline shadow-sm transition hover:border-blue-200">
+                <div className="flex items-start justify-between gap-3"><div className="min-w-0"><strong className="block truncate text-sm text-slate-800">{inquiry.customer_name}</strong><span className="mt-1 block text-[10px] text-muted">#{inquiry.id.slice(0, 8)}</span></div><StatusBadge status={inquiry.status} /></div>
+                <p className="mb-0 mt-3 line-clamp-2 text-xs font-medium text-slate-700">{inquiry.subject}</p><time className="mt-2 block text-[10px] text-muted" dateTime={inquiry.created_at}>{new Date(inquiry.created_at).toLocaleDateString()}</time>
+              </Link>
+            ))}
+          </div>
+          <div className="overflow-x-auto max-[640px]:hidden">
             <table className="w-full min-w-[760px] table-fixed border-collapse text-xs [&_td]:h-[68px] [&_td]:border-b [&_td]:border-slate-100 [&_td]:align-middle [&_td]:text-text [&_tbody_tr:last-child_td]:border-b-0">
               <colgroup><col className="w-[27%]" /><col className="w-[28%]" /><col className="w-[17%]" /><col className="w-[15%]" /><col className="w-[13%]" /></colgroup>
               <thead><tr><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-left text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500">Customer</th><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-left text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500">Subject</th><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-left text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500">Status</th><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-left text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500">Created</th><th scope="col" className="h-11 border-b border-border bg-slate-50/80 px-3.5 text-center text-[10px] font-bold uppercase tracking-[0.07em] whitespace-nowrap text-slate-500" aria-label="Actions"></th></tr></thead>
@@ -89,6 +98,7 @@ export default function DashboardPage() {
               ))}</tbody>
             </table>
           </div>
+          </>
         )}
       </section>
     </>
