@@ -18,7 +18,7 @@ Authentication and authorization are enforced by the backend rather than relying
 
 Access tokens are stored in HttpOnly cookies, while refresh tokens are rotated and stored as hashes in PostgreSQL. Passwords are hashed using bcrypt.
 
-Role-based authorization separates ADMIN and STAFF permissions. This ensures that administrative operations remain protected even when users attempt to access API endpoints directly.
+Role-based authorization separates ADMIN and STAFF permissions, ensuring that administrative operations remain protected even when users attempt to access API endpoints directly.
 
 ### 2.2 Inquiry Management and Data Integrity
 
@@ -68,7 +68,8 @@ AI-generated suggestions were reviewed, tested, and adapted to the project requi
 
 ## 6. Future Improvements
 
-- Implement real-time inquiry updates across multiple browser sessions.
-- Expand frontend integration and end-to-end automated testing.
-- Improve application logging and monitoring.
-- Extend accessibility testing and improvements.
+- **Customer Self-Service Portal:** Introduce customer registration and login, allowing customers to submit inquiries, view their inquiry history, and track request statuses. Customers should only be able to access their own records.
+- **Automated Inquiry Collection:** Integrate WhatsApp Business, email, and website forms using workflow automation tools such as n8n. Automations could extract customer details, validate information, detect potential duplicates, and create inquiry records for staff review.
+- **Real-Time Updates:** Implement real-time inquiry updates across multiple browser sessions.
+- **Testing:** Expand frontend integration and end-to-end automated testing.
+- **Monitoring:** Improve application logging, monitoring, and accessibility.
