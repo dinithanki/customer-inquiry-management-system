@@ -21,13 +21,13 @@ afterEach(() => {
 
 describe("Login form", () => {
   it("starts with empty credentials and discourages browser credential restoration", () => {
-    render(<LoginPage />);
+    const { container } = render(<LoginPage />);
 
     expect(screen.getByLabelText("Email address")).toHaveValue("");
     expect(screen.getByLabelText("Password")).toHaveValue("");
     expect(screen.getByLabelText("Email address")).toHaveAttribute("autocomplete", "off");
     expect(screen.getByLabelText("Password")).toHaveAttribute("autocomplete", "new-password");
-    expect(screen.getByRole("form")).toHaveAttribute("autocomplete", "off");
+    expect(container.querySelector("form")).toHaveAttribute("autocomplete", "off");
   });
 
   it("still signs in and clears submitted credentials", async () => {
