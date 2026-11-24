@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ChevronLeft, ChevronRight, KeyRound, Pencil, Plus, Search } from "lucide-react";
@@ -19,6 +20,7 @@ const staffSchema = z.object({
 type StaffValues = z.infer<typeof staffSchema>;
 
 export default function StaffManagementClient() {
+  const router = useRouter();
   const role = useAuthStore((state) => state.user?.role);
   const [staff, setStaff] = useState<Staff[]>([]);
   const [search, setSearch] = useState("");
@@ -58,12 +60,17 @@ export default function StaffManagementClient() {
   }, [limit, page, search, sortBy, sortOrder]);
 
   useEffect(() => {
+    if (role !== "ADMIN") return;
     const timeout = window.setTimeout(() => { void load(); }, 0);
     return () => window.clearTimeout(timeout);
-  }, [load]);
+  }, [load, role]);
+
+  useEffect(() => {
+    if (role && role !== "ADMIN") router.replace("/dashboard");
+  }, [role, router]);
 
   if (role !== "ADMIN") {
-    return <section className="rounded-xl border border-border bg-card shadow-card"><div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><h3 className="mt-1 mb-0 text-[15px] text-text">Access denied</h3><p className="m-0 max-w-[420px] text-xs leading-[1.6]">Staff management is available to administrators only.</p></div></section>;
+    return null;
   }
 
   const create = async (values: StaffValues) => {
