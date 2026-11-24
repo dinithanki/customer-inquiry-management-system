@@ -10,6 +10,7 @@ import { checkDuplicateInquiries, createInquiry } from "@/services/inquiry.servi
 import type { InquiryDuplicate } from "@/types/inquiry";
 import { getApiErrorMessage } from "@/lib/api";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { LoadingIndicator } from "@/components/ui/LoadingIndicator";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { inquirySchema, type InquiryValues } from "@/schemas/inquiry.schema";
 
@@ -131,7 +132,7 @@ export default function NewInquiryPage() {
           </label>
           <div className="mt-1 flex justify-end gap-2 border-t border-border pt-[14px] max-[420px]:flex-col-reverse">
             <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-white px-[14px] text-[13px] font-semibold text-text hover:border-slate-300 hover:bg-surface-muted max-[420px]:w-full" type="button" onClick={() => router.back()} disabled={isSubmitting}>Cancel</button>
-            <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-[14px] text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.16)] hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 max-[420px]:w-full" type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : duplicates.length > 0 ? "Confirm & Create" : "Create Inquiry"}</button>
+            <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-[14px] text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.16)] hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 max-[420px]:w-full" type="submit" disabled={isSubmitting}>{isSubmitting && <LoadingIndicator inline label="Saving inquiry" size="sm" />}{isSubmitting ? "Saving..." : duplicates.length > 0 ? "Confirm & Create" : "Create Inquiry"}</button>
           </div>
         </form>
       </section>

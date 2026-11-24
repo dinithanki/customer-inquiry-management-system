@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 import { getApiErrorMessage } from "@/lib/api";
+import { LoadingIndicator } from "@/components/ui/LoadingIndicator";
 import {
   deleteInquiry,
   listInquiries,
@@ -323,13 +324,7 @@ export default function InquiriesPage() {
 
         {/* Table */}
         {loading ? (
-          <div className="flex min-h-[260px] items-center justify-center gap-3 text-sm text-muted">
-            <LoaderCircle
-              size={20}
-              className="animate-spin text-primary"
-            />
-            Loading inquiries...
-          </div>
+          <LoadingIndicator label="Loading inquiries" className="min-h-[260px]" />
         ) : inquiries.length === 0 ? (
           <div className="flex min-h-[260px] flex-col items-center justify-center gap-3 px-5 text-center">
 

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ArrowRight, Eye, EyeOff, Inbox, LoaderCircle, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Inbox, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
+import { LoadingIndicator } from "@/components/ui/LoadingIndicator";
 import { getApiErrorMessage } from "@/lib/api";
 import { login } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
@@ -120,7 +121,7 @@ export default function LoginPage() {
           <button className="group mt-1 flex min-h-12 items-center justify-between rounded-xl border-0 bg-[linear-gradient(100deg,#2563eb,#1d4ed8)] px-4 text-[13px] font-bold text-white shadow-[0_8px_18px_rgba(37,99,235,0.2)] transition-[transform,box-shadow,background] duration-150 hover:not-disabled:-translate-y-px hover:not-disabled:bg-[linear-gradient(100deg,#1d4ed8,#1e40af)] hover:not-disabled:shadow-[0_11px_22px_rgba(37,99,235,0.25)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-wait disabled:opacity-[0.72]" type="submit" disabled={isSubmitting}>
             <span className="flex-1 text-center">{isSubmitting ? "Signing in..." : "Sign in"}</span>
             <span className="grid size-8 place-items-center rounded-lg bg-white/15 transition-colors group-hover:bg-white/25">
-              {isSubmitting ? <LoaderCircle className="animate-spin" size={17} aria-hidden="true" /> : <ArrowRight size={17} aria-hidden="true" />}
+              {isSubmitting ? <LoadingIndicator inline label="Signing in" size="sm" /> : <ArrowRight size={17} aria-hidden="true" />}
             </span>
           </button>
         </form>

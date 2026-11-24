@@ -9,6 +9,7 @@ import type { InquiryListItem, InquiryStatus } from "@/types/inquiry";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { LoadingIndicator } from "@/components/ui/LoadingIndicator";
 
 export default function DashboardPage() {
   const [recent, setRecent] = useState<InquiryListItem[]>([]);
@@ -61,7 +62,7 @@ export default function DashboardPage() {
           <div><h2 className="mb-1 text-base font-bold text-slate-800">Recent Inquiries</h2><p className="m-0 text-xs text-muted">Latest customer requests, newest first</p></div>
           <Link className="inline-flex items-center gap-[5px] text-xs font-semibold text-primary no-underline hover:text-blue-700" href="/inquiries">View all <ArrowUpRight size={15} /></Link>
         </div>
-        {loading ? <div className="flex min-h-[220px] items-center justify-center text-muted">Loading inquiries...</div> : recent.length === 0 ? (
+        {loading ? <LoadingIndicator label="Loading inquiries" className="min-h-[220px]" /> : recent.length === 0 ? (
           <div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><span className="grid size-11 place-items-center rounded-xl bg-blue-50 text-primary"><Inbox size={20} /></span><h3 className="mt-1 mb-0 text-[15px] font-bold text-text">No inquiries yet</h3><p className="m-0 max-w-[420px] text-xs leading-[1.6]">Recent inquiries will appear here when they are available.</p></div>
         ) : (
           <>

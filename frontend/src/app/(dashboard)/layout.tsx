@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopNavbar } from "@/components/layout/TopNavbar";
 import { useAuthStore } from "@/store/auth.store";
+import { LoadingIndicator } from "@/components/ui/LoadingIndicator";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -29,7 +30,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   }, [isInitialized, router, user]);
 
   if (!isInitialized) {
-    return <div className="grid min-h-screen place-items-center bg-page p-8"><div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><h3 className="mt-1 mb-0 text-[15px] text-text">Loading session</h3></div></div>;
+    return <div className="grid min-h-screen place-items-center bg-page p-8"><LoadingIndicator label="Loading session" className="min-h-[220px]" /></div>;
   }
 
   if (!user) return null;

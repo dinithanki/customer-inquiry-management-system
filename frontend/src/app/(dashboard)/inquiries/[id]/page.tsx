@@ -7,6 +7,7 @@ import { getInquiry, updateInquiryStatus } from "@/services/inquiry.service";
 import type { InquiryDetails, InquiryStatus } from "@/types/inquiry";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { LoadingIndicator } from "@/components/ui/LoadingIndicator";
 
 const allowedTargets: Record<InquiryStatus, InquiryStatus[]> = {
   NEW: ["IN_PROGRESS", "RESOLVED"],
@@ -57,7 +58,7 @@ export default function InquiryDetailsPage({ params }: { params: Promise<{ id: s
     }
   };
 
-  if (loading) return <div className="flex min-h-[220px] items-center justify-center text-muted">Loading inquiry...</div>;
+  if (loading) return <LoadingIndicator label="Loading inquiry" className="min-h-[220px]" />;
   if (error && !inquiry) return <section className="rounded-xl border border-border bg-card shadow-card"><div className="flex min-h-[220px] flex-col items-center justify-center gap-2.5 text-center text-muted"><h3 className="mt-1 mb-0 text-[15px] font-bold text-text">Unable to load inquiry</h3><p className="m-0 max-w-[420px] text-xs leading-[1.6]">{error}</p><button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-white px-[14px] text-[13px] font-semibold text-text hover:border-slate-300 hover:bg-surface-muted" type="button" onClick={() => void load()}>Reload</button></div></section>;
   if (!inquiry) return null;
 

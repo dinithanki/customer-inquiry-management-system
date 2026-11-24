@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { getApiErrorMessage } from "@/lib/api";
+import { LoadingIndicator } from "@/components/ui/LoadingIndicator";
 import { changePassword } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 
@@ -64,7 +65,7 @@ export default function ChangePasswordPage() {
           </label>
         ))}
         <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-[14px] text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.16)] hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Changing password..." : "Change password"}
+          {isSubmitting && <LoadingIndicator inline label="Changing password" size="sm" />}{isSubmitting ? "Changing password..." : "Change password"}
         </button>
       </form>
     </section>
