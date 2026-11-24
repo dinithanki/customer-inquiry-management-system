@@ -15,6 +15,7 @@ import inquiryRoutes from "./routes/inquiry.routes.js";
 import { requireTrustedOrigin } from "./middleware/trusted-origin.middleware.js";
 
 const app = express();
+app.set("trust proxy", 1);
 
 const frontendOrigin =
   process.env.FRONTEND_ORIGIN || "http://localhost:3000";
